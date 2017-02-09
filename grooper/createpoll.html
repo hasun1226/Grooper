@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewPoll">
+            Create new poll
+    </button>
+      
+    <!-- Modal -->
+    <div class="modal fade" id="createNewPoll" tabindex="-1" role="dialog" aria-labelledby="createNewPoll">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Create new poll</h4>
+          </div>
+          <div class="modal-body">
+            <!-- Form starts here --> 
+            <form>
+              <div class="form-group">
+                <label for="inputCourse">Course code</label>
+                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" placeholder="Course code" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectTitle">Project title</label>
+                <input type="text" class="form-control" id="inputProjectTitle" placeholder="Project title" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectDesc">Project description</label>
+                <textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="inputTeammates">How many group members are you looking for?</label>
+                <input type="text" class="form-control" id="inputTeammates" pattern="[0-9]" placeholder="" required>
+              </div>
+                <!-- I'm thinking each row could be a checkbox for the applicant? or separated by a comma or something like that-->
+              <div class="form-group">
+                <label for="inputKnowledge">I'm looking for members who know this:</label>
+                <input type="text" class="form-control" id="inputKnowledge" placeholder="Separate the different things by commas">
+              </div>
+              <div class="form-group">
+                <label for="inputQuestions">I want the applicants to answer the following questions:</label>
+                <input type="text" class="form-control" id="inputQuestions" placeholder="Separate the different questions using question marks or commas">
+              </div>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-default">Submit</button>
+                
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
