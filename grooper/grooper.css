@@ -1,0 +1,28 @@
+* {
+	box-sizing: border-box;
+    width: 100%;
+}
+
+header img.logo {
+	width: 150px;
+}
+
+
+nav ul {
+    list-style-type: none;
+    margin-bottom: 15px;
+    padding: 0;
+}
+
+nav li {
+    padding: 10px;
+    font-size: 20px;
+}
+
+@media screen and (min-width: 480px) {
+	/* Non-mobile */	
+	header {
+		width: 20%;
+		height: 100%;
+	}
+}
