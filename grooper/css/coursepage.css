@@ -1,0 +1,33 @@
+/*
+TODO: remove link color from text
+TODO: vertically align stuff
+*/
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.poll {
+  border: 1px solid grey;
+  margin-bottom: 5px;
+  display: block;
+  padding: 20px;
+}
+
+.poll-name {
+  font-size: 30px;
+}
+
+.poll-creator {
+  font-size: 20px;
+}
+
+.slots-open {
+  font-size: 20px;
+}
