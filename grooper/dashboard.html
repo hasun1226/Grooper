@@ -7,7 +7,7 @@
 		<!-- The above tags are for Bootstrap -->
 		
         <title>Grooper: Find your group</title>
-        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="css/dashboard.css">
 		<!-- Bootstrap css -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
@@ -22,7 +22,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#"><img alt="Brand" src="logo.png"></a>
+              <a class="navbar-brand" href="#"><img alt="Grooper" src="images/logo.png" style="height: 30px;"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -31,33 +31,33 @@
                 <li class="active"><a href="#">Profile <span class="sr-only">(current)</span></a></li>
                 <li><a href="#">Manage</a></li>
               </ul>
+			  <form class="navbar-form navbar-right form-inline" role="search">
+			    <div class="input-group">
+				  <input type="text" class="form-control" placeholder="Search your Courses">
+				  <div class="input-group-btn">
+				    <button class="btn btn-default" type="submit">
+				      <i class="glyphicon glyphicon-search"></i>
+				    </button>
+				  </div>
+				</div>
+			  </form>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
-	
-		<section class="search_course">
-			<label for="heading">Search your Courses</label>
-			<form class="form-inline">
-				<div class="form-group">
-					<input type="text" class="form-control" id="course">
-				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
-			</form>
-		</section>
-		
+
 		<section class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4>My polls</h4>
 				</div>
-				<table class="table table-fixed">
-					<tbody>
-						<tr>
-							<a href="#" class="list-group-item active">CSC108-ABC</a>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+				<div id="table_wrapper">
+    				<table>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+    				</table>
+  				</div>
+  			</div>
 		</section>
 		
 		<section class="col-md-6">
@@ -65,14 +65,29 @@
 				<div class="panel-heading">
 					<h4>My applications</h4>
 				</div>
-				<table class="table table-fixed">
-					<tbody>
-						<tr>
-							<a href="#" class="list-group-item active">CSC108-ABC</a>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+				<div id="table_wrapper">
+    				<table>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr> 
+    				</table>
+  				</div>
+  			</div>
 		</section>
 		
 		<section class="col-md-6">
@@ -80,14 +95,14 @@
 				<div class="panel-heading">
 					<h4>My groups</h4>
 				</div>
-				<table class="table table-fixed">
-					<tbody>
-						<tr>
-							<a href="#" class="list-group-item active">CSC108-ABC</a>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+				<div id="table_wrapper">
+    				<table>
+      					<tr>
+        					<td><a href="#" class="list-group-item active">CSC108-ABC</a></td>
+      					</tr>
+    				</table>
+  				</div>
+  			</div>
 		</section>
 		
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

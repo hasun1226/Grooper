@@ -1,0 +1,14 @@
+
+#table_wrapper {
+	height: 300px;
+	overflow-y: auto;
+}
+  
+table {
+	border-collapse: collapse; 
+	width: 100%;
+}
+
+a {
+	margin: 1px 0;
+}
