@@ -1,3 +1,7 @@
+.panel-warning > .panel-heading {
+	background-color: #fe8833 !important;
+	color: white !important;
+}
 
 #table_wrapper {
 	height: 300px;
@@ -7,8 +11,4 @@
 table {
 	border-collapse: collapse; 
 	width: 100%;
-}
-
-a {
-	margin: 1px 0;
 }
