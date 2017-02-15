@@ -13,18 +13,31 @@ html, body {
   padding: 0;
 }
 
-.poll {
+.course {
+	display: inline-block;
+}
+
+.right-aligned {
+	float: right;
+	margin-top: 15px;
+}
+
+tr:not(:first-child), td {
+	cursor: pointer;
+}
+
+.groups {
   border: 1px solid grey;
   margin-bottom: 5px;
   display: block;
   padding: 20px;
 }
 
-.poll-name {
+.group-name {
   font-size: 30px;
 }
 
-.poll-creator {
+.group-host {
   font-size: 20px;
 }
 
