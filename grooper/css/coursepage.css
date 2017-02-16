@@ -22,6 +22,12 @@ html, body {
 	margin-top: 15px;
 }
 
+.panel-custom {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 tr:not(:first-child), td {
 	cursor: pointer;
 }
