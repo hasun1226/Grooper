@@ -4,6 +4,14 @@
 	border: 1px solid #ccc;
 }
 
+.members {
+	text-align: right;
+}
+
 #app-form {
 	padding-bottom: 20px;
+}
+
+.form-button-wrapper {
+	text-align: center;
 }
