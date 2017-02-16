@@ -7,7 +7,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="stylesheet" href="css/pollpage.css">
     <link rel="stylesheet" href="css/navbar.css">
-    <title>Poll page</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>My Group</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -45,7 +46,7 @@
 
     <div class="section-wrapper container-fluid bg-warning">
       <div class="row">
-          <h1 class="col-xs-10"> Title </h1>
+          <h1 class="col-xs-10"> CSC108 - Mine </h1>
           <h1 class="col-xs-2 members"> 3/5</h1>
       </div>
       <div class="row">
@@ -59,61 +60,44 @@
       </div>
     </div>
 
-    <div class="section-wrapper container-fluid bg-info" id="app-form">
-      <div class="row"><h1 class="col-xs-12">Application Form</h1></div>
-
-      <form class="">
-        <div class="form-group">
-          <label for="exampleInputName2">Name</label>
-          <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+    <section class="col-xs-12">
+      <div class="panel panel-warning">
+        <div class="panel-heading">
+          <h4>Your Team</h4>
         </div>
-        <div class="form-group">
-          <label for="exampleInputEmail2">Email</label>
-          <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
-        </div>
-      </form>
-      <form>
-        <div class="form-group">
-          <label for="textarea_answer"> Sample open ended question </label>
-          <textarea class="form-control" id="textarea_answer" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-          <div class="row">
-            <label class="col-xs-12"> Sample Multiple choise questions</label>
+        <div id="table_wrapper">
+            <table>
+                <tr><td><a href="#" class="list-group-item" id="member1">Adam</a></td></tr>
+                <tr><td><a href="#" class="list-group-item" id="member2">Barry</a></td></tr>
+                <tr><td><a href="#" class="list-group-item" id="member3">Cathy</a></td></tr>
+            </table>
           </div>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
-          </label>
         </div>
-        <div class="form-group">
-          <div class="row">
-            <label class="col-xs-12"> Sample checkbox questions</label>
-          </div>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
-          </label>
-        </div>
-        <div class="form-button-wrapper">
-        <button type="button" class="btn btn-success">Submit</button>
-        </div>
-      </form>
-    </div> 
+    </section>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- Modal for Group Description -->
+    <div class="modal fade" id="Application">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Member Info</h4>
+          </div>
+          <div class="modal-body">     
+            <div class="section-wrapper container-fluid" id="app-form">
+              <div class="row"><h3 class="col-xs-12" id="app-name"></h3></div>
+              <div class="row"><p class="col-xs-2">Email:</p><p class="col-xs-10" id="app-email"></p></div>
+              <div class="row"><p class="col-xs-2">Phone:</p><p class="col-xs-10" id="app-phone">416-111-1111</p></div>
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/mygroups.js"></script>
   </body>
 </html>
