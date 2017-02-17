@@ -41,7 +41,7 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-	
+
     <div class="panel panel-default panel-custom">
       <div class="panel-heading text-center">
         <h2>My profile</h2>
@@ -51,17 +51,17 @@
 
           <div class="row">
             <div class="col-md-4">
-              <h3>Name <span class="btn glyphicon glyphicon-pencil" aria-hidden="true"></span></h3>Bill Gates
+              <h3>Name <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3><span class="content">Bill Gates</span>
             </div>
             <div class="col-md-4">
-              <h3>Email <span class="btn glyphicon glyphicon-pencil" aria-hidden="true"></span></h3>bill@microsoft.com
+              <h3>Email <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>bill@microsoft.com
             </div>
             <div class="col-md-4">
-              <h3>Phone number <span class="btn glyphicon glyphicon-pencil" aria-hidden="true"></span></h3>647-123-4567
+              <h3>Phone number <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>647-123-4567
             </div>
 		    <button class="btn">Change password</button>
           </div>
-		
+
           <div class="row course_history">
             <div class="col-md-12">
               <h3>Current courses <span class="add-course btn glyphicon glyphicon-plus"></span></h3>
@@ -83,7 +83,7 @@
               </ul>
             </div>
           </div>
-		
+
 		  <div class="row delete">
             <button class="btn btn-danger">Delete account</button>
           </div>
@@ -92,10 +92,27 @@
       </div>
 
     </div>
-    <script src="js/profile.js"></script>
+
+    <div id="editModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body text-center">
+            <input type="text" name="newContent">
+            <!-- Save button should save data instead of dismissing the modal -->
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/profile.js"></script>
   </body>
 </html>

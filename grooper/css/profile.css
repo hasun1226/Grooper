@@ -30,3 +30,12 @@
 	margin-top: 20px;
 	text-align: right;
 }
+
+#editModal input {
+  width: 50%;
+}
+
+#editModal button {
+  float: right;
+  margin-right: 5px;
+}
