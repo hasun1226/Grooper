@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grooper: Find your group</title>
+    <link rel="stylesheet" type="text/css" href="css/coursepage.css">
+	<link rel="stylesheet" href="css/pollpage.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img alt="Grooper" src="images/logo.png" style="height: 30px;"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="signin.html">Sign out</a></li>
+          </ul>
+		  <form class="navbar-form navbar-right form-inline" role="search">
+			<div class="input-group">
+			  <input type="text" class="form-control" placeholder="Search CSC309">
+			  <div class="input-group-btn">
+			    <button class="search btn btn-warning" type="submit">
+			    <i class="glyphicon glyphicon-search"></i>
+				</button>
+			  </div>
+			</div>
+		  </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+	
+    <div class="panel panel-default panel-custom">
+      <div class="panel-heading text-center">
+        <h2 class="course">CSC309</h2>
+	    <button type="button" class="btn btn-warning right-aligned" data-toggle="modal" data-target="#createNewPoll">
+	      <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </div>
+
+      <table class="table">
+        <thead>
+    	  <tr> 
+	        <th class="col-md-3">Host</th>
+		    <th class="col-md-6">Group Title</th>
+			<th class="col-md-3">Posted Date</th>
+		    <th class="col-md-3">Slots</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+		  <tr data-toggle="modal" data-id="3" data-target="#orderModal">
+		    <td class="group-host col-md-3">Bill Gates</td>
+		    <td class="group-name col-md-6">Looking for a hard worker</td>
+			<td class="col-md-3">Jan. 17</td>
+		    <td class="slots-open col-md-3">1/4</td>
+		  </tr>
+		  <tr data-toggle="modal" data-id="2" data-target="#orderModal">
+		    <td class="group-host col-md-3">Mark Zuckerberg</td>
+		    <td class="group-name col-md-6">Social Media Application</td>
+			<td class="col-md-3">Jan. 17</td>
+		    <td class="slots-open col-md-3">1/4</td>
+		  </tr>
+		  <tr data-toggle="modal" data-id="1" data-target="#orderModal">
+		    <td class="group-host col-md-3">Amir Chinaei</td>
+		    <td class="group-name col-md-6">TA Application</td>
+			<td class="col-md-3">Jan. 16</td>
+		    <td class="slots-open col-md-3">2/4</td>
+		  </tr>
+	    </tbody>
+      </table>
+    </div>
+	
+	<!-- Modal for Poll creation -->
+    <div class="modal fade" id="createNewPoll" tabindex="-1" role="dialog" aria-labelledby="createNewPoll">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Create a new poll</h4>
+          </div>
+          <div class="modal-body">
+            <!-- Form starts here --> 
+            <form>
+              <div class="form-group">
+                <label for="inputCourse">Course code</label>
+                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" value="CSC309" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectTitle">Project title</label>
+                <input type="text" class="form-control" id="inputProjectTitle" placeholder="Project title" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectDesc">Project description</label>
+                <textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="inputTeammates">What is the size of your group? </label>
+                <select class="selectpicker">
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				  <option>6</option>
+				  <option>7</option>
+				  <option>8</option>
+				  <option>9</option>
+				</select>
+              </div>
+              <div class="form-group">
+                <label for="inputKnowledge">I'm looking for members who know these:</label>
+                <input type="text" class="form-control" id="inputKnowledge" placeholder="Separate the different things by commas">
+              </div>
+              <div class="form-group">
+                <label for="inputQuestions">I want the applicants to answer the following questions:</label>
+                <input type="text" class="form-control" id="inputQuestions" placeholder="Separate the different questions using question marks or commas">
+              </div>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" class="submit_btn btn btn-default" style="float: right;">Submit</button>
+                
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<!-- Modal for Group Description -->
+	<div class="modal fade" id="orderModal" aria-labelledby="orderModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="section-wrapper container-fluid bg-warning">
+			  <div class="row">
+			    <h3 class="group-title col-xs-9"></h3>
+				<h3 class="slots col"></h4>
+			  </div>
+			  <div class="row">
+			    <p class="description col-xs-12"></p>
+			  </div>
+			  <div class="row">
+			    <h4 class="host col-xs-12"></h4>
+			  </div>
+			</div>
+			
+			<div class="section-wrapper container-fluid bg-info" id="app-form">
+			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12">Application Form</h3></div>
+			    <form class="">
+				<div class="form-group">
+				  <label for="InputName">Name</label>
+				  <input type="text" class="form-control" id="InputName" placeholder="Jane Doe">
+				</div>
+				<div class="form-group">
+				  <label for="InputEmail">Email</label>
+				  <input type="email" class="form-control" id="InputEmail" placeholder="jane.doe@example.com">
+				</div>
+			  </form>
+			  
+			  <form class="questions">
+			    <div class="form-group">
+				  <label for="textarea_answer"> Do you have a web application development experience? </label>
+				  <textarea class="form-control" id="textarea_answer" rows="3"></textarea>
+				</div>
+				<div class="form-group">
+				  <div class="row">
+				    <label class="col-xs-12"> How high would you rate your coding skills? </label>
+				  </div>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4"> 4
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option3"> 5
+				  </label>
+				</div>
+				<div class="form-group">
+				  <div class="row">
+				    <label class="col-xs-12"> Choose all the programming languages you can use </label>
+				  </div>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox1" value="option1"> C
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox2" value="option2"> Java
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox3" value="option3"> MySQL
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox4" value="option3"> Python
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox5" value="option3"> XML
+				  </label>
+				</div>
+				
+				<button type="button" class="btn btn-success">Submit</button>
+			  </form>
+		  </div><!-- /.modal-body -->
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/coursepage.js"></script>
+  </body>
+</html>
