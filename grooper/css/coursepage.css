@@ -1,8 +1,3 @@
-/*
-TODO: remove link color from text
-TODO: vertically align stuff
-*/
-
 html, body {
   width: 100%;
   height: 100%;
@@ -32,21 +27,31 @@ tr:not(:first-child), td {
 	cursor: pointer;
 }
 
-.groups {
-  border: 1px solid grey;
-  margin-bottom: 5px;
-  display: block;
-  padding: 20px;
+/* Below are for the GroupDescription Modal */
+
+.slots {
+	text-align: right;
+	margin-right: 15px;
 }
 
-.group-name {
-  font-size: 30px;
+.description {
+	margin-top: 10px;
 }
 
-.group-host {
-  font-size: 20px;
+.section-wrapper{
+	margin:1em 1em !important;
+	border-radius: 4px;
+	border: 1px solid #ccc;
 }
 
-.slots-open {
-  font-size: 20px;
+.members {
+	text-align: right;
+}
+
+#app-form {
+	padding-bottom: 20px;
+}
+
+.form-button-wrapper {
+	text-align: center;
 }

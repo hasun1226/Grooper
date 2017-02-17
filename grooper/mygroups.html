@@ -5,10 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <link rel="stylesheet" href="css/pollpage.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <title>My Group</title>
+    <link rel="stylesheet" href="css/mygroups.css">
+    <title>Grooper: Find your group</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,32 +29,46 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img alt="Brand" src="images/logo.png"></a>
+          <a class="navbar-brand" href="#"><img alt="Brand" src="images/logo.png" style="height: 30px;"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Profile <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Manage</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="signin.html">Sign out</a></li>
           </ul>
+		  <form class="navbar-form navbar-right form-inline" role="search">
+		    <div class="input-group">
+			  <input type="text" class="form-control" placeholder="Search CSC309">
+			  <div class="input-group-btn">
+			    <button class="search btn btn-warning" type="submit">
+				<i class="glyphicon glyphicon-search"></i>
+				</button>
+			  </div>
+			</div>
+		  </form>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
 
     <div class="section-wrapper container-fluid bg-warning">
       <div class="row">
-          <h1 class="col-xs-10"> CSC108 - Mine </h1>
-          <h1 class="col-xs-2 members"> 3/5</h1>
+          <h1 class="col-xs-10 title"> CSC108 - Grooper </h1>
       </div>
       <div class="row">
-        <h4 class="col-xs-12"> Long description:</h4>
         <p class="col-xs-12"> 
-          Grooper is a web application which lets the students in University of Toronto Computer Science to find a group for their projects more easily and more efficiently. It will be using a poll-like interface for the users who are looking for groups. Users can give a description about their groups when creating a poll to inform the others what the group is going to be like and the other users who are interested in the group can briefly introduce about themselves when declaring their interest to join the group. The host of the group can select the group mates among the candidates. 
+          Grooper is a web application that helps students find groups for courses. 
+		  It uses a poll interface to find groups. When a user creates a poll, 
+		  the creator can give a short description of his/her group’s project. 
+		  To help with the choosing process, the creator can add questions to the 
+		  poll which will be asked to the applicants. A group is formed with the 
+		  applicants that the creator of the poll chooses. 
         </p>
       </div>
       <div class="row">
-        <h4 class="col-xs-12"> Creator: ABC </h4>
+        <h4 class="col-xs-12">Host: Bill Gates</h4>
       </div>
     </div>
 
@@ -66,11 +78,13 @@
           <h4>Your Team</h4>
         </div>
         <div id="table_wrapper">
-            <table>
-                <tr><td><a href="#" class="list-group-item" id="member1">Adam</a></td></tr>
-                <tr><td><a href="#" class="list-group-item" id="member2">Barry</a></td></tr>
-                <tr><td><a href="#" class="list-group-item" id="member3">Cathy</a></td></tr>
-            </table>
+            <ul>
+                <li><a href="#" class="list-group-item" id="member1">Adam Sandler</a></li>
+                <li><a href="#" class="list-group-item" id="member2">Bill Gates</a></li>
+                <li><a href="#" class="list-group-item" id="member3">Catherine Zeta Jones</a></li>
+				<li><a href="#" class="list-group-item" id="member4">Dylan O'Brien</a></li>
+				<li><a href="#" class="list-group-item" id="member5">Esther Blanchett</a></li>
+            </ul>
           </div>
         </div>
     </section>

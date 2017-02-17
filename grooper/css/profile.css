@@ -21,3 +21,12 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.course_history {
+	margin-top: 20px;
+}
+
+.delete {
+	margin-top: 20px;
+	text-align: right;
+}

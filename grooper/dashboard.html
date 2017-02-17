@@ -28,14 +28,15 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Profile <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Manage</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+				<li><a href="signin.html">Sign out</a></li>
               </ul>
 			  <form class="navbar-form navbar-right form-inline" role="search">
 			    <div class="input-group">
-				  <input type="text" class="form-control" placeholder="Search your Courses">
+				  <input type="text" class="form-control" placeholder="Search CSC309">
 				  <div class="input-group-btn">
-				    <button class="btn btn-warning" type="submit">
+				    <button class="search btn btn-warning" type="submit">
 				      <i class="glyphicon glyphicon-search"></i>
 				    </button>
 				  </div>
@@ -51,11 +52,19 @@
 					<h4>My polls</h4>
 				</div>
 				<div id="table_wrapper">
-    				<table>
-      					<tr>
-        					<td><a href="#" class="list-group-item">CSC108-Mine</a></td>
-      					</tr>
-    				</table>
+    				<ul>
+      					<li>
+							<a href="mygroups.html" class="list-group-item">
+								CSC108-Grooper
+								<span class="badge">closed</span>
+							</a>
+      					</li>
+						<li>
+							<a href="#" class="list-group-item">
+								CSC309-Looking for a hard worker
+							</a>
+      					</li>
+    				</ul>
   				</div>
   			</div>
 		</section>
@@ -66,14 +75,18 @@
 					<h4>My applications</h4>
 				</div>
 				<div id="table_wrapper">
-    				<table>
-      					<tr>
-        					<td><a href="#" class="list-group-item">CSC108-Mine</a></td>
-      					</tr>
-      					<tr>
-        					<td><a href="#" class="list-group-item">CSC309-Mark</a></td>
-      					</tr>
-    				</table>
+    				<ul>
+      					<li>
+							<a href="#" class="list-group-item" data-toggle="modal" data-id="2" data-target="#orderModal">
+								CSC309-Social Media Application
+							</a>
+      					</li>
+						<li>
+        					<a href="#" class="list-group-item" data-toggle="modal" data-id="1" data-target="#orderModal">
+								CSC309-TA application
+							</a>
+      					</li>
+    				</ul>
   				</div>
   			</div>
 		</section>
@@ -84,18 +97,110 @@
 					<h4>My groups</h4>
 				</div>
 				<div id="table_wrapper">
-    				<table>
-      					<tr>
-        					<td><a href="#" class="list-group-item">CSC108-Mine</a></td>
-      					</tr>
-    				</table>
+    				<ul>
+      					<li>
+							<a href="mygroups.html" class="list-group-item">
+								CSC108-Grooper
+							</a>
+      					</li>
+    				</ul>
   				</div>
   			</div>
 		</section>
+		
+		<!-- Modal for Group Description -->
+	<div class="modal fade" id="orderModal" aria-labelledby="orderModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="section-wrapper container-fluid bg-warning">
+			  <div class="row">
+			    <h3 class="group-title col-xs-9"></h3>
+				<h3 class="slots col"></h4>
+			  </div>
+			  <div class="row">
+			    <p class="description col-xs-12"></p>
+			  </div>
+			  <div class="row">
+			    <h4 class="host col-xs-12"></h4>
+			  </div>
+			</div>
+			
+			<div class="section-wrapper container-fluid bg-info" id="app-form">
+			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12">Application Form</h3></div>
+			    <form class="">
+				<div class="form-group">
+				  <label for="InputName">Name</label>
+				  <input type="text" class="form-control" id="InputName" placeholder="Jane Doe">
+				</div>
+				<div class="form-group">
+				  <label for="InputEmail">Email</label>
+				  <input type="email" class="form-control" id="InputEmail" placeholder="jane.doe@example.com">
+				</div>
+			  </form>
+			  
+			  <form class="questions">
+			    <div class="form-group">
+				  <label for="textarea_answer"> Do you have a web application development experience? </label>
+				  <textarea class="form-control" id="textarea_answer" rows="3"></textarea>
+				</div>
+				<div class="form-group">
+				  <div class="row">
+				    <label class="col-xs-12"> How high would you rate your coding skills? </label>
+				  </div>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4"> 4
+				  </label>
+				  <label class="radio-inline">
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option3"> 5
+				  </label>
+				</div>
+				<div class="form-group">
+				  <div class="row">
+				    <label class="col-xs-12"> Choose all the programming languages you can use </label>
+				  </div>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox1" value="option1"> C
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox2" value="option2"> Java
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox3" value="option3"> MySQL
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox4" value="option3"> Python
+				  </label>
+				  <label class="checkbox-inline">
+				    <input type="checkbox" id="inlineCheckbox5" value="option3"> XML
+				  </label>
+				</div>
+				
+				<button type="button" class="btn btn-success">Submit</button>
+			  </form>
+		  </div><!-- /.modal-body -->
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 		
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/dashboard.js"></script>
 	</body>
 </html>
