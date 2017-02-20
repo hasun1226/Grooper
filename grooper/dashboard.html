@@ -16,15 +16,15 @@
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
+              <a class="navbar-brand" href="#"><img alt="Grooper" src="images/logo.png" style="height: 30px; margin-top: -3px;"></a>
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#"><img alt="Grooper" src="images/logo.png" style="height: 30px;"></a>
             </div>
-
+			
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
@@ -32,6 +32,7 @@
                 <li><a href="dashboard.html">Dashboard</a></li>
 				<li><a href="signin.html">Sign out</a></li>
               </ul>
+			  
 			  <form class="navbar-form navbar-right form-inline" role="search">
 			    <div class="input-group">
 				  <input type="text" class="form-control" placeholder="Search CSC309">
@@ -45,7 +46,7 @@
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
-
+		
 		<section class="col-md-6">
 			<div class="panel panel-warning">
 				<div class="panel-heading">
@@ -53,15 +54,16 @@
 				</div>
 				<div id="table_wrapper">
     				<ul>
-      					<li>
-							<a href="mygroups.html" class="list-group-item">
-								CSC108-Grooper
-								<span class="badge">closed</span>
+						<li>
+							<a href="managepoll.html" class="list-group-item">
+								CSC309-Looking for a hard worker
+								<span class="badge badge-new">New !</span>
 							</a>
       					</li>
 						<li>
-							<a href="#" class="list-group-item">
-								CSC309-Looking for a hard worker
+							<a href="mygroups.html" class="list-group-item">
+								CSC108-Grooper
+								<span class="badge">closed</span>
 							</a>
       					</li>
     				</ul>
@@ -84,6 +86,7 @@
 						<li>
         					<a href="#" class="list-group-item" data-toggle="modal" data-id="1" data-target="#orderModal">
 								CSC309-TA application
+								<span class="badge badge-success">Invited</span>
 							</a>
       					</li>
     				</ul>
@@ -132,7 +135,7 @@
 			
 			<div class="section-wrapper container-fluid bg-info" id="app-form">
 			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12">Application Form</h3></div>
-			    <form class="">
+			    <form class="basic_info">
 				<div class="form-group">
 				  <label for="InputName">Name</label>
 				  <input type="text" class="form-control" id="InputName" placeholder="Jane Doe">
@@ -165,7 +168,7 @@
 				    <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4"> 4
 				  </label>
 				  <label class="radio-inline">
-				    <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option3"> 5
+				    <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"> 5
 				  </label>
 				</div>
 				<div class="form-group">
@@ -173,23 +176,23 @@
 				    <label class="col-xs-12"> Choose all the programming languages you can use </label>
 				  </div>
 				  <label class="checkbox-inline">
-				    <input type="checkbox" id="inlineCheckbox1" value="option1"> C
+				    <input type="checkbox" name="inlineCheckbox" id="inlineCheckbox1" value="option1"> C
 				  </label>
 				  <label class="checkbox-inline">
-				    <input type="checkbox" id="inlineCheckbox2" value="option2"> Java
+				    <input type="checkbox" name="inlineCheckbox" id="inlineCheckbox2" value="option2"> Java
 				  </label>
 				  <label class="checkbox-inline">
-				    <input type="checkbox" id="inlineCheckbox3" value="option3"> MySQL
+				    <input type="checkbox" name="inlineCheckbox" id="inlineCheckbox3" value="option3"> MySQL
 				  </label>
 				  <label class="checkbox-inline">
-				    <input type="checkbox" id="inlineCheckbox4" value="option3"> Python
+				    <input type="checkbox" name="inlineCheckbox" id="inlineCheckbox4" value="option4"> Python
 				  </label>
 				  <label class="checkbox-inline">
-				    <input type="checkbox" id="inlineCheckbox5" value="option3"> XML
+				    <input type="checkbox" name="inlineCheckbox" id="inlineCheckbox5" value="option5"> XML
 				  </label>
 				</div>
 				
-				<button type="button" class="btn btn-success">Submit</button>
+				<button type="button" class="edit btn btn-success" data-dismiss="modal">Edit</button>
 			  </form>
 		  </div><!-- /.modal-body -->
         </div><!-- /.modal-content -->

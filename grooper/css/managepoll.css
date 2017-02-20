@@ -7,28 +7,30 @@
 	margin-right: auto !important;
 }
 
-ul {
-	list-style: none;
+.in-modal {
+	width: 100%;
 }
 
-.list-group-addon {
-	padding: 10px 10px;
-	font-size: 15px;
-	display: inline;
-	font-weight: normal;
-	line-height: 1;
-	color: #555555;
-	text-align: center;
-	background-color: #eeeeee;
-	border: 1px solid #cccccc;
-	border-radius: 6px;
+.edit {
+	margin-top: -30px;
+	margin-bottom: 10px !important;
+	float: right;
 }
 
-li a {
-	display: inline;
+.item {
+	width: calc(100% - 20px);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
 }
 
-i {
+.form-control:hover {
+	background-color: #F5F5F5;
+	text-decoration: none !important;
+	color: #555555 !important;
+ }
+
+i:not(.glyphicon-search) {
 	margin-left: 5px;
 	font-size: 18px;
 }

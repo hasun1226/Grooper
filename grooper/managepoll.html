@@ -32,8 +32,8 @@
 			<div class="input-group">
 			  <input type="text" class="form-control" placeholder="Search CSC309">
 			  <div class="input-group-btn">
-			    <button class="btn btn-warning" type="submit">
-			    <i class="glyphicon glyphicon-search"></i>
+			    <button class="search btn btn-warning" type="submit">
+			      <i class="glyphicon glyphicon-search"></i>
 				</button>
 			  </div>
 			</div>
@@ -45,19 +45,20 @@
     <div class="section-wrapper container-fluid bg-warning">
 		<div class="row form-group">
 			<section class="col-xs-9">
-				<input type="text" class="form-control" id="inputProjectTitle" value="Looking for a hard worker" required>
+				<input type="text" class="form-control" id="inputProjectTitle" required>
 			</section>
 			<section class="slots pull-right">
-				1/<input type="text" class="form-control" id="groupSize" value="4" pattern="\d">
+				1/<input type="text" class="form-control" id="groupSize" pattern="\d">
 			</section>
         </div>
 		<div class="row form-group">
-			<textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required>Still thinking about the project idea
+			<textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required>
 			</textarea>
 		</div>
-			<div class="row">
-			    <h4 class="host col-xs-12">Host: Bill Gates</h4>
-			</div>
+		<div class="row">
+			<h4 class="host col-xs-12">Host: Bill Gates</h4>
+		</div>
+		<button type="button" class="edit btn btn-success">Edit</button>
 	</div>
 			
 	<div class="section-wrapper container-fluid bg-info" id="app-form">
@@ -71,7 +72,7 @@
 		<form class="questions collapse" id="questions">
 			<div class="form-group">
 				<div class="row" style="margin-top: 10px;">
-					<label class="col-xs-12">Which grade do you aim for in this course?</label>
+					<label class="col-xs-12 question">Which grade do you aim for in this course?</label>
 				</div>
 				<label class="radio-inline">
 				    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> A
@@ -87,7 +88,7 @@
 				</label>
 			</div>
 				
-			<button type="button" class="btn btn-success">Edit</button>
+			<button type="button" class="add btn btn-primary">Add Question</button>
 		</form>
 	</div>
 	
@@ -96,23 +97,44 @@
 			<h3 class="applicants col-xs-12">Choose your Groupmates!</h3>
 		</div>
 		<div class="row">
-			<ul>
-				<li class="list-group">
-					<span class="list-group-addon">
-						<input type="checkbox" aria-label="...">
-					</span>
-					<a href="#" class="list-group-item" id="applicant1">Someone</a>
-				</li>
-			</ul>
-
+		    <div class="input-group item">
+				<a href="#" class="form-control applicant" data-app="1">Alan Turing</a>
+				<span class="input-group-btn">
+					<button type="submit" class="invite btn btn-success">Invite</button>
+				</span>
+			</div><!-- /input-group -->
+			
+			<div class="input-group item">
+				<a href="#" class="form-control applicant" data-app="2">Steve Jobs</a>
+				<span class="input-group-btn">
+					<button type="submit" class="invite btn btn-success">Invite</button>
+				</span>
+			</div><!-- /input-group -->
 		</div><!-- /.row -->
-		<button type="submit" class="btn btn-success">Invite</button>
 	</div>
+	
+	<!-- Modal for Applicant's responses -->
+    <div class="modal fade" id="Responses">
+      <div class="modal-dialog">
+        <div class="modal-content panel-success">
+          <div class="modal-header panel-heading">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">     
+            <div class="in-modal section-wrapper container-fluid" id="app-form">
+              <div class="row"><h4 class="col-xs-12 que" data-que="1"></h4></div>
+              <div class="row"><p class="col-xs-12 ans" data-ans="1"></p></div>
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 			  
-    <script src="js/managepoll.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/managepoll.js"></script>
   </body>
 </html>

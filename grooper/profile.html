@@ -51,35 +51,38 @@
 
           <div class="row">
             <div class="col-md-4">
-              <h3>Name <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3><span class="content">Bill Gates</span>
+              <h3>Name<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
+			  <span class="content" id="Name">Bill Gates</span>
             </div>
             <div class="col-md-4">
-              <h3>Email <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>bill@microsoft.com
+              <h3>Email<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
+			  <span class="content" id="Email">bill@microsoft.com</span>
             </div>
             <div class="col-md-4">
-              <h3>Phone number <span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>647-123-4567
+              <h3>Phone number<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
+			  <span class="content" id="Phone number">647-123-4567</span>
             </div>
 		    <button class="btn">Change password</button>
           </div>
 
           <div class="row course_history">
             <div class="col-md-12">
-              <h3>Current courses <span class="add-course btn glyphicon glyphicon-plus"></span></h3>
-              <ul class="list-group">
-                <li class="list-group-item">CSC201 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
-                <li class="list-group-item">CSC202 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
-                <li class="list-group-item">CSC203 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+              <h3>Current courses<span class="btn glyphicon glyphicon-plus" data-toggle="modal" data-target="#addCourses" aria-hidden="true"></span></h3>
+              <ul class="list-group" id="Curr">
+                <li class="list-group-item">CSC201<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+                <li class="list-group-item">CSC202<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+                <li class="list-group-item">CSC203<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
               </ul>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <h3>Previous courses <span class="add-course btn glyphicon glyphicon-plus"></span></h3>
-              <ul class="list-group">
-                <li class="list-group-item">CSC101 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
-                <li class="list-group-item">CSC102 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
-                <li class="list-group-item">CSC103 <span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+              <h3>Previous courses<span class="btn glyphicon glyphicon-plus" data-toggle="modal" data-target="#addCourses" aria-hidden="true"></span></h3>
+              <ul class="list-group" id="Prev">
+                <li class="list-group-item">CSC101<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+                <li class="list-group-item">CSC102<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
+                <li class="list-group-item">CSC103<span class="remove-course btn glyphicon glyphicon-trash"></span></li>
               </ul>
             </div>
           </div>
@@ -93,17 +96,39 @@
 
     </div>
 
-    <div id="editModal" class="modal fade">
+	<!-- Modal that adds courses -->
+    <div id="addCourses" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-center">
             <h4 class="modal-title"></h4>
           </div>
           <div class="modal-body text-center">
-            <input type="text" name="newContent">
-            <!-- Save button should save data instead of dismissing the modal -->
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<form id="manageCourse">
+				<input type="text" class="required" id="newCourse" autofocus required>
+				<!-- Save button should save data instead of dismissing the modal -->
+				<button type="submit" class="add-item btn btn-primary">Add Course</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+	
+	<!-- Modal that edits profile -->
+	<div id="editModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body text-center">
+			<form id="manageProfile">
+				<input type="text" class="required" id="newContent" autofocus required>
+				<!-- Save button should save data instead of dismissing the modal -->
+				<button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+				<button class="edit btn btn-primary" type="submit">Save Changes</button>
+			</form>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

@@ -3,6 +3,15 @@
 	color: white !important;
 }
 
+.badge-new {
+	background-color: #ffffff !important;
+	color: #f89406 !important;
+}
+
+.badge-success {
+  background-color: #468847 !important;
+}
+
 #table_wrapper {
 	height: 300px;
 }

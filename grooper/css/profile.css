@@ -26,6 +26,10 @@
 	margin-top: 20px;
 }
 
+span, .cancel, .edit {
+	margin-top: -5px;
+}
+
 .delete {
 	margin-top: 20px;
 	text-align: right;
