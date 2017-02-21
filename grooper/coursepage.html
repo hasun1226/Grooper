@@ -63,6 +63,12 @@
 	      </tr>
 	    </thead>
 	    <tbody>
+		  <tr data-toggle="modal" data-id="4" data-target="#orderModal">
+		    <td class="group-host col-md-3">Steve Jobs</td>
+		    <td class="group-name col-md-6">Apple Project</td>
+			<td class="col-md-3">Jan. 18</td>
+		    <td class="slots-open col-md-3">1/4</td>
+		  </tr>
 		  <tr data-toggle="modal" data-id="3" data-target="#orderModal">
 		    <td class="group-host col-md-3">Bill Gates</td>
 		    <td class="group-name col-md-6">Looking for a hard worker</td>
@@ -95,7 +101,7 @@
           </div>
           <div class="modal-body">
             <!-- Form starts here --> 
-            <form>
+            <form id ="application_form">
               <div class="form-group">
                 <label for="inputCourse">Course code</label>
                 <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" value="CSC309" required>
@@ -108,30 +114,30 @@
                 <label for="inputProjectDesc">Project description</label>
                 <textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required></textarea>
               </div>
-              <div class="form-group">
+              <div class="form-group" id="select">
                 <label for="inputTeammates">What is the size of your group? </label>
-                <select class="selectpicker">
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>5</option>
-				  <option>6</option>
-				  <option>7</option>
-				  <option>8</option>
-				  <option>9</option>
+                <select class="selectpicker" id="select_id">
+				  <option id="2">2</option>
+				  <option id="3">3</option>
+				  <option id="4">4</option>
+				  <option id="5">5</option>
+				  <option id="6">6</option>
+				  <option id="7">7</option>
+				  <option id="8">8</option>
+				  <option id="9">9</option>
 				</select>
               </div>
-              <div class="form-group">
-                <label for="inputKnowledge">I'm looking for members who know these:</label>
-                <input type="text" class="form-control" id="inputKnowledge" placeholder="Separate the different things by commas">
+			  <label for="instruction">Type the question that will be displayed to the others:</label>
+			  <div class="input-group" style="margin-bottom: 20px;">
+                <input type="text" class="form-control" id="inputQuestion">
+				<span class="input-group-btn">
+				  <button type="button" class="btn-default btn" style="background-color: #CFCFCF;" onclick="createQuestion()">Add Question</button>
+				</span>
+			  </div>
+			  <div class="form-group" id="buttons">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="submit" class="submit_btn btn btn-success" style="float: right;">Post</button>
               </div>
-              <div class="form-group">
-                <label for="inputQuestions">I want the applicants to answer the following questions:</label>
-                <input type="text" class="form-control" id="inputQuestions" placeholder="Separate the different questions using question marks or commas">
-              </div>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button type="submit" class="submit_btn btn btn-default" style="float: right;">Submit</button>
-                
             </form>
           </div>
         </div>
@@ -161,18 +167,7 @@
 			</div>
 			
 			<div class="section-wrapper container-fluid bg-info" id="app-form">
-			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12">Application Form</h3></div>
-			    <form class="">
-				<div class="form-group">
-				  <label for="InputName">Name</label>
-				  <input type="text" class="form-control" id="InputName" placeholder="Jane Doe">
-				</div>
-				<div class="form-group">
-				  <label for="InputEmail">Email</label>
-				  <input type="email" class="form-control" id="InputEmail" placeholder="jane.doe@example.com">
-				</div>
-			  </form>
-			  
+			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12">Application Form</h3></div>			  
 			  <form class="questions"></form>
 		  </div><!-- /.modal-body -->
         </div><!-- /.modal-content -->

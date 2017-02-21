@@ -55,3 +55,7 @@ tr:not(:first-child), td {
 .form-button-wrapper {
 	text-align: center;
 }
+
+.reject {
+	margin-left: 10px;
+}
