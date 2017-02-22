@@ -27,6 +27,17 @@ tr:not(:first-child), td {
 	cursor: pointer;
 }
 
+/* Below are for the createNewPoll Modal */
+.input-group-btn select {
+	border-color: #ccc;
+	margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+	padding-left: 4px;
+	padding-right: 0;
+}
+
 /* Below are for the GroupDescription Modal */
 
 .slots {
@@ -58,4 +69,8 @@ tr:not(:first-child), td {
 
 .reject {
 	margin-left: 10px;
+}
+
+.questions button {
+	float: right;
 }

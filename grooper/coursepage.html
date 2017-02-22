@@ -62,7 +62,7 @@
 		    <th class="col-md-3">Slots</th>
 	      </tr>
 	    </thead>
-	    <tbody>
+	    <tbody id="polls">
 		  <tr data-toggle="modal" data-id="4" data-target="#orderModal">
 		    <td class="group-host col-md-3">Steve Jobs</td>
 		    <td class="group-name col-md-6">Apple Project</td>
@@ -117,21 +117,28 @@
               <div class="form-group" id="select">
                 <label for="inputTeammates">What is the size of your group? </label>
                 <select class="selectpicker" id="select_id">
-				  <option id="2">2</option>
-				  <option id="3">3</option>
-				  <option id="4">4</option>
-				  <option id="5">5</option>
-				  <option id="6">6</option>
-				  <option id="7">7</option>
-				  <option id="8">8</option>
-				  <option id="9">9</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
 				</select>
               </div>
-			  <label for="instruction">Type the question that will be displayed to the others:</label>
+			  <label for="instruction">Type the question that will be asked to the others:</label>
 			  <div class="input-group" style="margin-bottom: 20px;">
+			    <span class="input-group-btn">
+				  <select class="btn" id="question_type">
+				    <option value="text">Text</option>
+					<option value="MC">MC</option>
+					<option value="Checkbox">Checkbox</option>
+				  </select>
+				</span>
                 <input type="text" class="form-control" id="inputQuestion">
 				<span class="input-group-btn">
-				  <button type="button" class="btn-default btn" style="background-color: #CFCFCF;" onclick="createQuestion()">Add Question</button>
+				  <button type="button" class="btn-default btn" style="background-color: #CFCFCF;" onclick="createQuestion()">Add</button>
 				</span>
 			  </div>
 			  <div class="form-group" id="buttons">
