@@ -1,0 +1,58 @@
+.panel-warning > .panel-heading {
+	background-color: #fe8833 !important;
+	color: white !important;
+}
+
+.badge-new {
+	background-color: #ffffff !important;
+	color: #f89406 !important;
+}
+
+.badge-success {
+  background-color: #468847 !important;
+}
+
+.table_wrapper {
+	height: 300px;
+}
+  
+ul {
+	list-style: none;
+	max-height: 300px;
+	overflow: auto;
+	margin: 0;
+	padding: 0;
+}
+
+/* Below are for the GroupDescription Modal */
+
+.slots {
+	text-align: right;
+	margin-right: 15px;
+}
+
+.description {
+	margin-top: 10px;
+}
+
+.section-wrapper{
+	margin:1em 1em !important;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.members {
+	text-align: right;
+}
+
+#app-form {
+	padding-bottom: 20px;
+}
+
+.form-button-wrapper {
+	text-align: center;
+}
+
+.reject {
+	margin-left: 10px;
+}

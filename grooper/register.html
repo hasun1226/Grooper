@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above tags are for Bootstrap -->
+		
+    <title>Grooper: Find your group</title>
+
+    <link rel="stylesheet" href="css/register.css">
+	<!-- Bootstrap css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+
+    <div class="container">
+        
+        <form class="form-register">
+            
+            <h2 class="form-register-heading"><img alt="Grooper" src="images/logo.png" class="logo"></h2>
+            <h4 class="center-text">Create a new account</h4>
+            <label for="registerName" class="sr-only">Name</label>
+            <input type="text" id="registerName" class="form-control first-field" placeholder="Name" required autofocus>
+                  
+            <label for="registerEmail" class="sr-only">Email address</label>
+            <input type="email" id="registerEmail" class="form-control middle-field" placeholder="Email address" required>
+                  
+            <label for="registerPhone" class="sr-only">Phone number</label>
+            <input type="text" id="registerPhone" class="form-control middle-field" placeholder="Phone number" pattern="((\((\d{3})\)(\d{3})(-?))|(\d{6})|(\d{3}-(\d{3})-))(\d{4})" required>
+                  
+            <label for="registerPassword" class="sr-only">Password</label>
+            <input type="password" id="registerPassword" class="form-control middle-field" placeholder="Password" required>
+                  
+            <label for="confirmPassword" class="sr-only">Confirm password</label>
+            <input type="password" id="confirmPassword" class="form-control last-field" placeholder="Confirm Password" required>
+                  
+            <button class="register btn btn-lg btn-warning btn-block" type="submit">Register</button>
+		  
+            <button class="back_btn btn btn-lg btn-warning btn-block" type="button">Back to sign in</button>
+                  
+        </form>
+
+    </div> <!-- /container -->
+
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <script src="js/register.js"></script>
+  </body>
+</html>
