@@ -1,6 +1,13 @@
-$('.register').on('click', function () {
-	alert('You are registered!')
-	window.location="signin.html";
+$('.form-register').on('submit', function(e) {
+	e.preventDefault();
+	/* Above command to stay on the same page just to see how front-end works */
+	
+	if ($('#registerPassword').val() == $('#confirmPassword').val()) {
+		alert('You are registered!');
+		window.location="signin.html";
+	} else {
+		alert('Your passwords don\'t match!');
+	}
 	return false;
 });
 

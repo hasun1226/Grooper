@@ -1,4 +1,7 @@
-$('.login').on('click', function () {
+$('.form-signin').on('submit', function(e) {
+	e.preventDefault();
+	/* Above command to stay on the same page just to see how front-end works */
+	
 	window.location="dashboard.html";
 	return false;
 });

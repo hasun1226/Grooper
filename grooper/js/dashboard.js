@@ -71,14 +71,18 @@ $('#orderModal').on('show.bs.modal', function(event) {
 		modal.find('.questions').html('<button type="button" class="accept btn btn-success" data-dismiss="modal">Accept</button><button type="button" class="reject btn btn-danger" data-dismiss="modal">Reject</button>')
 		$('.accept').on('click', function() {
 			if (confirm('Will you accept the invitation to this group?')) {
-				// move to 'My groups'? or leave it in the 'My applications' panel
+				// move to 'My groups' panel
+				var item = $('[data-id="' + getid + '"]')
+				item.find('span').remove()
+				$('<li><a href="mygroups.html#1" class="list-group-item">' + item.text() + '</a></li>').insertBefore($('#groups').find('ul').children(":first"))
+				item.remove()
 			}
 		})
 		
 		$('.reject').on('click', function() {
 			if (confirm('Are you sure? You can\'t join this group again if you reject now!')) {
 				// remove this item from the 'My applications' panel
-				document.getElementById('app2').remove()
+				$('[data-id="' + getid + '"]').remove()
 			}
 		})
 	}

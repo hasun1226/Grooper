@@ -34,6 +34,7 @@ $('#orderModal').on('show.bs.modal', function(event) {
 		for (var i = 1; i < answer.length + 1; i++) {
 			form_div.append('<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadioOptions' + i + '" value="option' + i + '"/>' + answer[i-1] + '</label>');
 		}
+		// Adds different Edit button because it is created by the user
 		modal.find('.questions').html(form_div).append('<a href="managepoll.html"><button type="button" class="btn btn-success">Edit</button></a>')
 		
 	} else if (getid == 2) {
@@ -46,13 +47,13 @@ $('#orderModal').on('show.bs.modal', function(event) {
 		
 		// Text area
 		var form_div = $('<div class="form-group"></div>');
-		form_div.append('<label for="textarea_answer">Do you have a web application development experience?</label><textarea class="form-control" id="textarea_answer" rows="3"></textarea>');
+		form_div.append('<label for="textarea_answer">Do you have a web application development experience?</label><textarea class="form-control" id="textarea_answer" rows="3" required></textarea>');
 		
 		// Radio buttons
 		var form_div1 = $('<div class="form-group"></div>');
 		form_div1.append('<div class="row"><label class="col-xs-12">How high would you rate your coding skills?</label></div>');
 		for (var i = 1; i < 5 + 1; i++) {
-			form_div1.append('<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio' + i + '" value="' + i + '"/>' + i + '</label>');
+			form_div1.append('<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio' + i + '" value="' + i + '" required/>' + i + '</label>');
 		}
 		
 		// Checkboxes
@@ -64,15 +65,7 @@ $('#orderModal').on('show.bs.modal', function(event) {
 		}
 		
 		// button that edits the responses, must be submit button if application was not submitted
-		var btn = $('<button type="button" class="edit btn btn-success" data-dismiss="modal">Edit</button>')
-		btn.click(function () {
-			text_ans = modal.find('#textarea_answer').val()
-			radio_checked = $('input[name=inlineRadioOptions]:checked').val()
-			checkbox_checked = []
-			$('input[name=inlineCheckbox]:checked').each(function () {
-				checkbox_checked.push($(this).val());
-			})
-		})
+		var btn = $('<button type="submit" class="edit btn btn-success">Edit</button>')
 		
 		modal.find('.questions').html(form_div).append(form_div1, form_div2, btn)
 		
@@ -117,6 +110,19 @@ $('#orderModal').on('show.bs.modal', function(event) {
 			}
 		})
 	}
+});
+
+// Submit/edit responses
+$('.questions').on('submit', function(e) {
+	e.preventDefault();
+	// Above line is to stay on the same page
+	
+	text_ans = modal.find('#textarea_answer').val();
+	radio_checked = $('input[name=inlineRadioOptions]:checked').val();
+	checkbox_checked = [];
+	$('input[name=inlineCheckbox]:checked').each(function () {
+		checkbox_checked.push($(this).val());
+	});
 });
 
 $('.search').on('click', function() {
