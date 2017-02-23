@@ -18,6 +18,7 @@ __Step 5:__ You are practically done looking around Grooper! You can sign out by
 
 __Optional:__ You can also try to register from the signin page by clicking "Register" button (Make sure your email has @ preceded by the domain, phone number is in the form of "(###)###-####" or "(###)####### or "##########" and the passwords must be the same)
 
+
 ## What has been done for Phase 2?
 
 ### [Front end design](grooper)
@@ -71,6 +72,7 @@ Please note that the below features are simulations of front-end behaviors only 
   *	If the invitation to the group is accepted, the application is moved from the list to the closed groups category
   * If the invitation to the group is rejected, the application will be removed from the list
   
+---
 ### [Requirement list from Phase 1 updated](Phase1_updated.pdf)
 #### Main Changes
 * Project description added to explain how "Polls" help the group formation.
@@ -78,6 +80,7 @@ Please note that the below features are simulations of front-end behaviors only 
 * Added how to handle polls that stay in the list (the list will be emptied at the beginning of each semester)
 * Added a general category for the features that apply to the overall web application such as responsive design, database management, course searching mechanism using Cobalt API in the navigation bar
 
+---
 ### Decisions Made
 * Using Bootstrap
   * Bootstrap allows us to use variable content styles that are readily available, and there are many documents and examples we could use from.
