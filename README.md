@@ -3,22 +3,22 @@
 Grooper is a web application that helps students find groups for courses. It uses a “Poll” interface to find the groups and match the teammates. When a user creates a poll, the creator can give a short description of his/her group’s project. To help with the choosing process, the creator can add questions as an “Application form” to the poll which will be asked to the other. Users who are interested in the group after viewing the description will submit their responses to the application form. Then the creator of the poll can choose his/her teammates from the list of applicants. Once all the teammates are confirmed, the group is closed and the poll is removed.
 
 ## How to Grooper
-__Step 1:__ Sign in with bill.gates@mail.utoronto.ca and a password of your choice from the [starting page](grooper/signin.html)
-__Step 2:__ You are at dashboard page where you can click each item and make changes to the editable items as you'd like
+__Step 1:__ Sign in with bill.gates@mail.utoronto.ca and a password of your choice from the [starting page](grooper/signin.html).
+__Step 2:__ You are at dashboard page where you can click each item and make changes to the editable items as you'd like.
   * "My polls" shows you which polls you have created to look for teammates (New! means there are new applicants who wish to join your group, Closed means that the group is confirmed and you can access the group information)
   * "My applications" shows you for which groups you submitted the forms to join them (Invited means you can accept the invitation to join the group, Closed means this group is formed with other people and can be removed from the list)
   * "My groups" shows you which groups you have currently joined (Click on them to see which groups you are in!)
-__Step 3:__ Now let's search CSC309 on the search bar, you will be brought to the list of polls for CSC309 where you can create a new poll or view others' posts
-__Step 4:__ Let's view your profile and edit your information by clicking the "Profile" anchor on the navigation bar
-__Step 5:__ You are practically done looking around Grooper! You can sign out by clicking "Sign out" anchor on the navigation bar
-__Optional:__ You can also try to register from the signin page by clicking "Register" button (Make sure your email has @ preceded by the domain, phone number is in the form of "(###)###-####" or "(###)####### or "##########" and the passwords must be the same)
+__Step 3:__ Now let's search CSC309 on the search bar, you will be brought to the list of polls for CSC309 where you can create a new poll or view others' posts.
+__Step 4:__ Let's view your profile and edit your information by clicking the "Profile" anchor on the navigation bar.
+__Step 5:__ You are practically done looking around Grooper! You can sign out by clicking "Sign out" anchor on the navigation bar.
+__Optional:__ You can also try to register from the signin page by clicking "Register" button (Make sure your email has @ preceded by the domain, phone number is in the form of "(###)###-####" or "(###)####### or "##########" and the passwords must be the same).
 
 ## What has been done for Phase 2?
 
 ### [Front end design](grooper)
 HTML, CSS and JavaScript files were created to imitate the behaviors of the application on the front-end.
-#### Implemented features
 Please note that the below features are simulations of front-end behaviors only using static dummy data. Any back-end processes such as fetching the data from the server or posting the data to the server are not implemented yet. Those items that are strictly front-end will be __bolded__.
+#### Implemented features
 * Account Management
   * Account creation (See [Register page](grooper/register.html]))
   * __Form validation (mandatory name, email, phone number and 2 passwords must match the patterns and the passwords must match)__
