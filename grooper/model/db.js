@@ -32,7 +32,7 @@ var PollSchema = new Schema (
 	size: { type: Number, required: true },
 	date: { type: Date, required: true },
 	course: { type: String, required: true },
-	question: [{ 
+	questions: [{ 
 	  // id helpful to have for same question but different type/options
 	  id: { type: Number, required: true }, 
 	  // 0: open, 1: single-answer MC, 2: multiple-answers MC
@@ -53,6 +53,7 @@ var ApplicationSchema = new Schema (
   {
     user: { type: Number, required: true },
 	poll: { type: Number, required: true },
+	// 0: waiting, 1: invited, 2: accepted
 	status: { type: Number, required: true },
 	//answer is an array because it could have multiple answers
 	answers: [{
