@@ -3,8 +3,6 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema(
   {
-    id: 
-	  { type: Number, required: true, unique: true },
     name:
 	  { type: String, requried: true },
     email: 
@@ -14,9 +12,9 @@ var UserSchema = new Schema(
     pw: 
 	  { type: String, required: true },
 	curr_course:
-	  [ code: { type: String, required: true } ],
+	  [ { type: String, required: true } ],
 	prev_course:
-	  [ code: { type: String, required: true } ]
+	  [ { type: String, required: true } ]
   },
   {
     collection: 'users'
@@ -76,7 +74,7 @@ var GroupSchema = new Schema (
   }
 );
 
-mongoose.connect('mongodb://localhost:3000/grooper');
+mongoose.connect('mongodb://localhost/grooper');
 
 //converting the schemas to models
 var Users = mongoose.model('Users', UserSchema);
