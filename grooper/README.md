@@ -1,11 +1,14 @@
 ## Making the backend work.
 
-1. Install Dependencies:
+1. Create package.json
+    ```$ npm init
 
-    ```$ npm install express express-validator ejs body-parser mongoose cobalt-uoft```
+2. Install Dependencies:
 
-2. Run server:
+    ```$ npm install express mongodb-autoincrement ejs body-parser mongoose cobalt-uoft```
+
+3. Run server:
 
     ```$ node index.js```
 
-3. Access the [app](http://localhost:3000/)
+4. Access the [app](http://localhost:3000/)
