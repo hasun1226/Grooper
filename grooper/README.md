@@ -6,7 +6,7 @@
 
 2. Install Dependencies:
 
-    ```$ npm install express mongodb-autoincrement ejs body-parser mongoose cobalt-uoft```
+    ```$ npm install express mongodb-autoincrement ejs body-parser mongoose```
 
 3. Run mongodb and mongo in separate terminals
 
