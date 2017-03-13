@@ -125,11 +125,6 @@ $('.questions').on('submit', function(e) {
 	});
 });
 
-$('.search').on('click', function() {
-	window.location="coursepage.html"
-	return false
-});
-
 qNo = 1;
 
 function createQuestion() {	

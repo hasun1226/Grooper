@@ -28,12 +28,12 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="signin.html">Sign out</a></li>
+            <li><a href="dashboard">Dashboard</a></li>
+			<li><a href="/">Sign out</a></li>
           </ul>
-		  <form class="navbar-form navbar-right form-inline" role="search">
+		  <form class="navbar-form navbar-right form-inline" action="/search" method="GET">
 			<div class="input-group">
-			  <input type="text" class="form-control" placeholder="Search CSC309">
+			  <input type="text" class="form-control" name="course">
 			  <div class="input-group-btn">
 			    <button class="search btn btn-warning" type="submit">
 			    <i class="glyphicon glyphicon-search"></i>
@@ -47,7 +47,7 @@
 	
     <div class="panel panel-default panel-custom">
       <div class="panel-heading text-center">
-        <h2 class="course">CSC309</h2>
+        <h2 class="course"><%= course %></h2>
 	    <button type="button" class="btn btn-warning right-aligned" data-toggle="modal" data-target="#createNewPoll">
 	      <i class="glyphicon glyphicon-plus"></i>
         </button>

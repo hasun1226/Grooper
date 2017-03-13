@@ -23,7 +23,7 @@ var UserSchema = new Schema(
 
 var PollSchema = new Schema (
   {
-    id: { type: Number, required: true, unique: true },
+    _id: { type: Number, required: true, unique: true },
 	creator: { type: Number, required: true },
 	title: { type: String, required: true },
 	description: { type: String, required: true },
@@ -49,8 +49,8 @@ var PollSchema = new Schema (
 
 var ApplicationSchema = new Schema (
   {
-    user: { type: Number, required: true },
-	poll: { type: Number, required: true },
+    uid: { type: Number, required: true },
+	pid: { type: Number, required: true },
 	// 0: waiting, 1: invited, 2: accepted
 	status: { type: Number, required: true },
 	//answer is an array because it could have multiple answers
@@ -66,8 +66,8 @@ var ApplicationSchema = new Schema (
 
 var GroupSchema = new Schema (
   {
-    id: { type: Number, required: true },
-	member: { type: Number }
+    pid: { type: Number, required: true },
+	members: [{ type: Number }]
   },
   {
     collection: 'group'

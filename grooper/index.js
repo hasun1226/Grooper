@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var models = require('./model/db'); //access each model by models
 var autoIncrement = require("mongodb-autoincrement");
-//var cobalt = require('cobalt-uoft');
 
 var app = express();
 
@@ -14,6 +13,9 @@ app.set('view engine', 'html');
 
 // Parses the text as JSON and exposes the resulting object on req.body
 app.use( bodyParser.json() ); 
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 //mongo
 var MongoClient = require('mongodb').MongoClient;
@@ -75,6 +77,7 @@ app.post('/users', function (req, res) {
   });
 });
 
+// Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
   if (!req.body.email || !req.body.pw)
@@ -95,5 +98,37 @@ app.post('/login', function(req, res) {
       userID: docs[0].id,
 	  email: req.body.email,
 	});
+  });
+});
+
+// Need testing
+app.get('/search', function(req, res) {
+	console.log(req.query);
+	db.collection('polls').find(req.query).toArray(function(err, docs) {
+		console.log(docs);
+		return res.render('coursepage', {
+			"polls": docs,
+			"course": req.query.course.toUpperCase()
+		});
+	});
+});
+
+// Need testing
+app.get('/polls/:uid', function(req, res) {
+  db.collection('polls').find({
+    creator: parseInt(req.params.uid)
+  }).toArray(function(err, docs) {
+    console.log(docs);
+	return res.json(docs);
+  });
+});
+
+// Need testing
+app.get('/polls/:pid', function(req, res) {
+  db.collection('polls').find({
+    _id: parseInt(req.params.pid)
+  }).toArray(function(err, docs) {
+    console.log(docs);
+	return res.json(docs[0]);
   });
 });
