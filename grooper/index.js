@@ -152,6 +152,95 @@ app.get('/polls/:pid', function(req, res) {
   });
 });
 
+
+
+// Add a new application
+app.post('applications', function(req, res){
+  // Validation
+  if (!req.body.uid || !req.body.pid || !req.body.answers){
+  	console.log("Error occured when adding application!");
+  	return res.sendStatus(400);
+  }
+  // check if the poll exist
+  db.collection('polls').count({
+  	_id: req.body.pid
+  }, function(err, count){
+  	if (count == 0){
+  	  return res.sendStatus(403);
+  	}
+  	// insert application into database
+  	db.collection('applications').insertOne({
+  	  uid: req.body.uid,
+  	  pid: req.body.pid,
+  	  status: 0, // 0 is waiting
+  	  answers: req.body.answers
+  	}, function(err, result){
+  	  res.json({ // don't know if this is necessary
+  	  	uid: req.body.uid,
+  	  	pid: req.body.pid
+  	  });
+  	  // res.sendStatus(200);
+  	});
+  });
+});
+
+
+// delete application
+app.delete('applications', function(req, res){
+  db.collection('applications').deleteOne({
+  	uid: req.body.uid,
+  	pid: req.body.pid
+  }, function(err, result){
+  	if (result.deletedCount == 1){
+  	  return res.sendStatus(200);
+  	}
+  	else {
+  	  return res.sendStatus(403);
+  	}
+  })
+})
+
+// Get all the applications for a user
+app.get('/applications/:uid', function(req, res){
+  db.collection('applications').find({
+  	uid: parseInt(req.params.uid)
+  }).toArray(function(err, docs){
+  	cosnsole.log(docs);
+  	return res.json(docs)
+  });
+});
+
+// update statuc of application
+app.put('applications', function(req, res){
+  //validation
+  if (!req.body.uid || !req.body.pid)
+  	return res.sendStatus(400);
+  if (!req.body.status && !req.body.answers)
+  	return res.sendStatus(400);
+
+  // check if applcation exist just in case
+  db.collection('applications').find({
+  	uid: req.body.uid,
+  	pid: req.body.pid
+  }).toArray(function(err, docs){
+  	if (docs.length == 0)
+  	  return res.sendStatus(403);
+  	var updateJSON = {}
+	if (req.body.status)
+	  updateJSON.status = req.body.status;
+	if (req.body.answers)
+	  updateJSON.answers = req.body.answers;
+	db.collection('applications').updateOne({
+	  uid: req.body.uid,
+	  pid: req.body.pid
+	}, {
+	  $set: updateJSON
+	}, function(err, result){
+	  res.sendStatus(200);
+	});
+  })
+  
+});
 app.post('/groups/:pid', function(req, res) {
    
 });
