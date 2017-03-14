@@ -5,8 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Grooper: Find your group</title>
-    <link rel="stylesheet" type="text/css" href="css/coursepage.css">
-	<link rel="stylesheet" href="css/pollpage.css">
+    <link rel="stylesheet" type="text/css" href="css/search.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   </head>
 
@@ -104,7 +103,7 @@
             <form id ="application_form">
               <div class="form-group">
                 <label for="inputCourse">Course code</label>
-                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" value="CSC309" required>
+                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" value=<%= course %> required>
               </div>
               <div class="form-group">
                 <label for="inputProjectTitle">Project title</label>
@@ -185,6 +184,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-	<script src="js/coursepage.js"></script>
+	<script src="js/search.js"></script>
   </body>
 </html>

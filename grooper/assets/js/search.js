@@ -148,9 +148,11 @@ function createQuestion() {
 		
 		var form_div = document.createElement('div');
 		form_div.className ='form-group newly_added';
+		form_div.setAttribute('id', qNo);
 		form_div.append(division);
 	
 		var type = document.getElementById('question_type');
+		var instruction = document.createTextNode("Select the options that you wish to make as answer");
 		if (type.options[type.selectedIndex].value == 'text') {
 			var question = document.createElement('textarea');
 			question.rows = '3';
@@ -167,6 +169,7 @@ function createQuestion() {
 					question.type = 'radio';
 					question.setAttribute('name', 'radio' + qNo);
 					radio_inline.prepend(question);
+					form_div.append(instruction);
 					form_div.append(radio_inline);
 				}
 			});
@@ -181,7 +184,8 @@ function createQuestion() {
 					var question = document.createElement('INPUT');
 					question.type = 'checkbox';
 					cb_inline.prepend(question);
-					form_div.append(cb_inline);
+					form_div.append(instruction);
+					form_div.append(instruction, cb_inline);
 				}
 			});
 		}
@@ -197,7 +201,7 @@ $('#createNewPoll').on('hidden.bs.modal', function() {
 	// Default everything in the modal
 	$('.newly_added').remove();
 	document.getElementById('inputQuestion').value = '';
-	$('#inputCourse').val('CSC309');
+	$('#inputCourse').val($('.course').text());
 	$('#inputProjectTitle').val('');
 	$('#inputProjectDesc').val('');
 	document.getElementById('question_type').value = 'text';
@@ -207,10 +211,46 @@ $('#createNewPoll').on('hidden.bs.modal', function() {
 var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 
 $('#application_form').on('submit', function(e) {
-	e.preventDefault();
-	/* Above command to stay on the same page just to see how front-end works */
+  e.preventDefault();
+  /* Above command to stay on the same page just to see how front-end works */
+
+  var inputProjectTitle = $('#inputProjectTitle').val();
+  var inputProjectDesc = $('#inputProjectDesc').val();
+  var inputCourse = $('#inputCourse').val();
+  
+  var select_id = document.getElementById("select_id");
+  var group_size = select_id.options[select_id.selectedIndex].value;
 	
-	var inputCourse = $('#inputCourse').val();
+  var date = new Date();
+  
+  // Questions that are newly added can be found with classname "newly_added"
+  $('.newly_added').find('.remove-question').remove();
+  var questions = $('.newly_added').clone();
+  var q_data = [];
+  questions.each(function() {
+    q_data.push("{ id: " + this.id + ", q_type: , question: , options: }");
+  })
+  
+  $.ajax({
+    url: "/polls",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({
+      "creator": 1,
+      "title": inputProjectTitle,
+      "description": inputProjectDesc,
+      "size": group_size,
+      "date": date,
+      "course": inputCourse,
+      "questions": []  // replace [] with q_data
+    }),
+    success: function(response) {
+      alert("success!");
+    }
+  });
+	
+	/* Below are the simulated codes */
 	if (inputCourse != 'CSC309') {
 		$('#createNewPoll').modal('hide');
 		// Default everything in the modal
@@ -220,14 +260,6 @@ $('#application_form').on('submit', function(e) {
 		return;
 	}
 	
-	var inputProjectTitle = $('#inputProjectTitle').val();
-	var inputProjectDesc = $('#inputProjectDesc').val();
-
-	var select_id = document.getElementById("select_id");
-	var group_size = select_id.options[select_id.selectedIndex].value;
-	
-	// Questions that are newly added can be found with classname "newly_added"
-	$('.newly_added').find('.remove-question').remove();
 	questions_added = $('.newly_added').clone();
 	
 	var polls = $('#polls');
@@ -235,7 +267,7 @@ $('#application_form').on('submit', function(e) {
 	newItem.append('<td class="group-host col-md-3">Bill Gates</td>');
 	newItem.append('<td class="group-name col-md-6">' + inputProjectTitle + '</td>');
 	
-	var date = new Date();
+	// Date
 	newItem.append('<td class="col-md-3">' + monthNames[date.getMonth()] + ' ' + date.getDate() + '</td>');
 	
 	newItem.append('<td class="slots-open col-md-3">1/'+ group_size + '</td>');

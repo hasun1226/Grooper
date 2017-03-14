@@ -1,3 +1,11 @@
+$(document).ready(function() {
+  var url = window.location.href;
+  var uid = url.substr(url.indexOf("=") + 1);
+
+  $.get("/polls", { uid: uid }, function(data) {
+	// handle the returned data
+  });
+});
 
 var text_ans = 'bunch'
 var radio_checked = 5

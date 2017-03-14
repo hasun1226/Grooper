@@ -8,14 +8,14 @@ var app = express();
 // Set views path, template engine and default layout
 app.use(express.static(__dirname + '/assets'));
 app.engine('.html', require('ejs').__express);
+app.engine('js', require('ejs').renderFile);
 app.set('views', __dirname);
 app.set('view engine', 'html');
 
 // Parses the text as JSON and exposes the resulting object on req.body
-app.use( bodyParser.json() ); 
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
+app.use( bodyParser.json() );
+// Support URL-encoded bodies, req.query
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //mongo
 var MongoClient = require('mongodb').MongoClient;
@@ -35,11 +35,11 @@ app.get('/', function(req, res) {
 });
 
 app.get('/register', function(req, res) {
-	res.render('register');
+  res.render('register');
 });
 
 app.get('/dashboard', function(req, res) {
-	res.render('dashboard');
+  res.render('dashboard');
 });
 
 // Create user
@@ -66,11 +66,7 @@ app.post('/users', function (req, res) {
         pw: req.body.pw
       }, function(err, result) {
 		return res.json({
-			__id: result.insertedId,
-			name: req.body.name,
-			phone: req.body.phone,
-			email: req.body.email,
-			pw: req.body.pw
+		  _id: result.insertedId
 		});
 	  });
     });
@@ -87,36 +83,59 @@ app.post('/login', function(req, res) {
     email: req.body.email,
     pw: req.body.pw
   }).toArray(function(err, docs) {
-	  console.log(docs);
+	  console.log(docs[0]);
 	// This set of email and pw doesn't exist
     if (docs.length == 0) {
-		console.log(req.body);
       return res.sendStatus(403);
     }
 	// Successfully logged in
-	return res.json({
-      userID: docs[0].id,
-	  email: req.body.email,
-	});
+	return res.json( docs[0] );
   });
 });
 
 // Need testing
 app.get('/search', function(req, res) {
-	console.log(req.query);
-	db.collection('polls').find(req.query).toArray(function(err, docs) {
-		console.log(docs);
-		return res.render('coursepage', {
-			"polls": docs,
-			"course": req.query.course.toUpperCase()
-		});
+  console.log(req.query);
+  db.collection('polls').find(req.query).toArray(function(err, docs) {
+    console.log(docs);
+    return res.render('search', {
+      "polls": docs,
+      "course": req.query.course.toUpperCase()
+    });
+  });
+});
+
+app.post('/polls', function(req, res) {
+  console.log(req.body);
+  // Validation
+  if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.date || !req.body.size) {
+	console.log("bad request");
+    return res.sendStatus(400);
+  }
+  
+  // Insert into database
+  autoIncrement.getNextSequence(db, 'polls', function (err, autoIndex) {
+    db.collection('polls').insertOne({
+      _id: autoIndex,
+      creator: req.body.creator,
+      title: req.body.title,
+      description: req.body.description,
+      course: req.body.course,
+	  date: req.body.date,
+	  size: req.body.size,
+	  questions: req.body.questions
+    }, function(err, result) {
+      return res.json({
+        _id: result.insertedId
+      });
 	});
+  });
 });
 
 // Need testing
-app.get('/polls/:uid', function(req, res) {
+app.get('/polls', function(req, res) {
   db.collection('polls').find({
-    creator: parseInt(req.params.uid)
+    creator: req.body.uid
   }).toArray(function(err, docs) {
     console.log(docs);
 	return res.json(docs);
