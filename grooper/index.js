@@ -151,3 +151,64 @@ app.get('/polls/:pid', function(req, res) {
 	return res.json(docs[0]);
   });
 });
+
+app.post('/groups/:pid', function(req, res) {
+   
+});
+
+app.get('/groups/:uid', function(req, res) {
+   db.collection('groups').find({
+       members: {$in: [parseInt(req.params.uid)]}
+   }).toArray(function(err, docs) {
+    var groups = [];
+    for (var i = 0; i < docs.length; i++){
+        groups.push(docs[i].pid);
+    }
+    console.log(docs);
+	return res.json({groups});
+  });
+});
+
+app.post('/groups/:pid/member', function(req, res) {
+   db.collection('groups').updateOne({
+       pid: parseInt(req.params.pid),
+       members: {$nin [req.uid]}
+   },{
+       $push: {members: req.uid}
+   }, function(err, result){
+       if(result.modifiedCount == 1){
+           res.sendStatus(200);
+       } else{
+           res.sendStatus(403);
+       }
+   });
+});
+
+app.delete('/groups/:pid/member', function(req, res) {
+   db.collection('groups').updateOne({
+       pid: parseInt(req.params.pid),
+       members: {$in [req.uid]}
+   },{
+       $pull: {members: req.uid}
+   }, function(err, result){
+       if(result.modifiedCount == 1){
+           res.sendStatus(200);
+       } else{
+           res.sendStatus(403);
+       }
+   });
+});
+
+app.get('/groups/:pid', function(req, res) {
+   db.collection('groups').find({
+       pid: parseInt(req.params.pid)
+   }).toArray(function(err, docs) {
+    console.log(docs);
+	return res.json(docs[0]);
+  });
+});
+
+app.delete('/groups/:pid', function(req, res) {
+    db.collection('groups').deleteOne({pid: parseInt(req.params.pid)});
+    res.sendStatus(200);
+});
