@@ -73,6 +73,20 @@ app.post('/users', function (req, res) {
   });
 });
 
+// Retrieve information about a user
+app.get('/users/:uid', function(req, res) {
+  db.collection('users').find({
+    _id: parseInt(req.params.uid)
+  }).toArray(function(err, result) {
+    console.log(result);
+    return res.json({
+      name: result.name
+      email: result.email
+      phone: result.phone
+    });
+  });
+});
+
 // Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
@@ -112,7 +126,7 @@ app.post('/polls', function(req, res) {
 	console.log("bad request");
     return res.sendStatus(400);
   }
-  
+
   // Insert into database
   autoIncrement.getNextSequence(db, 'polls', function (err, autoIndex) {
     db.collection('polls').insertOne({
@@ -239,10 +253,10 @@ app.put('applications', function(req, res){
 	  res.sendStatus(200);
 	});
   })
-  
+
 });
 app.post('/groups/:pid', function(req, res) {
-   
+
 });
 
 app.get('/groups/:uid', function(req, res) {
