@@ -87,6 +87,21 @@ app.get('/users/:uid', function(req, res) {
   });
 });
 
+// Delete a user
+// TODO: Make sure only the user itself or an admin can delete the user
+app.delete('/users/:uid', function(req, res) {
+  db.collection('user').deleteOne({
+    _id: parseInt(req.params.uid)
+  }, function(err, result){
+    if (result.deletedCount == 1){
+      return res.sendStatus(200);
+    }
+    else {
+      return res.sendStatus(403);
+    }
+  });
+});
+
 // Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
