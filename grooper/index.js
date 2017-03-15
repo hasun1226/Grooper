@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var models = require('./model/db'); //access each model by models
 var autoIncrement = require("mongodb-autoincrement");
-
 var app = express();
 
 // Set views path, template engine and default layout
@@ -152,8 +151,6 @@ app.get('/polls/:pid', function(req, res) {
   });
 });
 
-
-
 // Add a new application
 app.post('applications', function(req, res){
   // Validation
@@ -184,7 +181,6 @@ app.post('applications', function(req, res){
   });
 });
 
-
 // delete application
 app.delete('applications', function(req, res){
   db.collection('applications').deleteOne({
@@ -197,8 +193,8 @@ app.delete('applications', function(req, res){
   	else {
   	  return res.sendStatus(403);
   	}
-  })
-})
+  });
+});
 
 // Get all the applications for a user
 app.get('/applications/:uid', function(req, res){
@@ -210,7 +206,7 @@ app.get('/applications/:uid', function(req, res){
   });
 });
 
-// update statuc of application
+// update status of application
 app.put('applications', function(req, res){
   //validation
   if (!req.body.uid || !req.body.pid)
@@ -218,7 +214,7 @@ app.put('applications', function(req, res){
   if (!req.body.status && !req.body.answers)
   	return res.sendStatus(400);
 
-  // check if applcation exist just in case
+  // check if application exist just in case
   db.collection('applications').find({
   	uid: req.body.uid,
   	pid: req.body.pid
@@ -241,10 +237,47 @@ app.put('applications', function(req, res){
   })
   
 });
+
+//create a new group
 app.post('/groups/:pid', function(req, res) {
-   
+  if(!req.body.creator){
+    console.log('bad request');
+    return res.sendStatus(400);
+  }
+  db.collection('groups')
+  db.collection('groups').insertOne({
+    pid: req.params.pid,
+    members: [req.body.creator]
+  }, function(err, result) {
+    return res.sendStatus(200);
+  });
 });
 
+/*
+// check if the poll exist
+  db.collection('polls').count({
+  	_id: req.body.pid
+  }, function(err, count){
+  	if (count == 0){
+  	  return res.sendStatus(403);
+  	}
+  	// insert application into database
+  	db.collection('applications').insertOne({
+  	  uid: req.body.uid,
+  	  pid: req.body.pid,
+  	  status: 0, // 0 is waiting
+  	  answers: req.body.answers
+  	}, function(err, result){
+  	  res.json({ // don't know if this is necessary
+  	  	uid: req.body.uid,
+  	  	pid: req.body.pid
+  	  });
+  	  // res.sendStatus(200);
+  	});
+  });
+*/
+
+//get all the groups for a user
 app.get('/groups/:uid', function(req, res) {
    db.collection('groups').find({
        members: {$in: [parseInt(req.params.uid)]}
@@ -258,6 +291,7 @@ app.get('/groups/:uid', function(req, res) {
   });
 });
 
+//add a member to a group
 app.post('/groups/:pid/member', function(req, res) {
    db.collection('groups').updateOne({
        pid: parseInt(req.params.pid),
@@ -273,6 +307,7 @@ app.post('/groups/:pid/member', function(req, res) {
    });
 });
 
+//delete a member from a group
 app.delete('/groups/:pid/member', function(req, res) {
    db.collection('groups').updateOne({
        pid: parseInt(req.params.pid),
@@ -281,13 +316,14 @@ app.delete('/groups/:pid/member', function(req, res) {
        $pull: {members: req.uid}
    }, function(err, result){
        if(result.modifiedCount == 1){
-           res.sendStatus(200);
+           return res.sendStatus(200);
        } else{
-           res.sendStatus(403);
+           return res.sendStatus(403);
        }
    });
 });
 
+//get a group
 app.get('/groups/:pid', function(req, res) {
    db.collection('groups').find({
        pid: parseInt(req.params.pid)
@@ -297,7 +333,15 @@ app.get('/groups/:pid', function(req, res) {
   });
 });
 
+//delete a group
 app.delete('/groups/:pid', function(req, res) {
-    db.collection('groups').deleteOne({pid: parseInt(req.params.pid)});
-    res.sendStatus(200);
+    db.collection('groups').deleteOne({
+        pid: parseInt(req.params.pid)
+    }, function(err, result){
+        if(result.deletedCount == 1){
+            return res.sendStatus(200);
+        } else{
+            return res.sendStatus(403);
+        }
+    });
 });
