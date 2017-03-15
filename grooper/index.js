@@ -72,6 +72,35 @@ app.post('/users', function (req, res) {
   });
 });
 
+// Retrieve information about a user
+app.get('/users/:uid', function(req, res) {
+  db.collection('users').find({
+    _id: parseInt(req.params.uid)
+  }).toArray(function(err, result) {
+    console.log(result);
+    return res.json({
+      name: result.name
+      email: result.email
+      phone: result.phone
+    });
+  });
+});
+
+// Delete a user
+// TODO: Make sure only the user itself or an admin can delete the user
+app.delete('/users/:uid', function(req, res) {
+  db.collection('user').deleteOne({
+    _id: parseInt(req.params.uid)
+  }, function(err, result){
+    if (result.deletedCount == 1){
+      return res.sendStatus(200);
+    }
+    else {
+      return res.sendStatus(403);
+    }
+  });
+});
+
 // Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
@@ -111,7 +140,7 @@ app.post('/polls', function(req, res) {
 	console.log("bad request");
     return res.sendStatus(400);
   }
-  
+
   // Insert into database
   autoIncrement.getNextSequence(db, 'polls', function (err, autoIndex) {
     db.collection('polls').insertOne({
@@ -235,7 +264,7 @@ app.put('applications', function(req, res){
 	  res.sendStatus(200);
 	});
   })
-  
+
 });
 
 //create a new group
@@ -252,30 +281,6 @@ app.post('/groups/:pid', function(req, res) {
     return res.sendStatus(200);
   });
 });
-
-/*
-// check if the poll exist
-  db.collection('polls').count({
-  	_id: req.body.pid
-  }, function(err, count){
-  	if (count == 0){
-  	  return res.sendStatus(403);
-  	}
-  	// insert application into database
-  	db.collection('applications').insertOne({
-  	  uid: req.body.uid,
-  	  pid: req.body.pid,
-  	  status: 0, // 0 is waiting
-  	  answers: req.body.answers
-  	}, function(err, result){
-  	  res.json({ // don't know if this is necessary
-  	  	uid: req.body.uid,
-  	  	pid: req.body.pid
-  	  });
-  	  // res.sendStatus(200);
-  	});
-  });
-*/
 
 //get all the groups for a user
 app.get('/groups/:uid', function(req, res) {
