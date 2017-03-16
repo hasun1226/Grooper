@@ -8,12 +8,11 @@
 
     ```$ npm install express mongodb-autoincrement ejs body-parser mongoose```
 
-3. Run mongodb and mongo in separate terminals
+3. Run mongo
 
-    ```$ mongodb```
     ```$ mongo```
 
-4. Run server:
+4. Run server in separate terminal:
 
     ```$ node index.js```
 

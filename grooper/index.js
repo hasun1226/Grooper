@@ -43,6 +43,7 @@ app.get('/dashboard', function(req, res) {
 
 // Create user
 app.post('/users', function (req, res) {
+	console.log(req.body);
   // Validation
   if (!req.body.name || !req.body.email || !req.body.phone || !req.body.pw) {
 	console.log("bad request");
@@ -79,8 +80,8 @@ app.get('/users/:uid', function(req, res) {
   }).toArray(function(err, result) {
     console.log(result);
     return res.json({
-      name: result.name
-      email: result.email
+      name: result.name,
+      email: result.email,
       phone: result.phone
     });
   });
@@ -121,22 +122,21 @@ app.post('/login', function(req, res) {
   });
 });
 
-// Need testing
+// Search polls in course
 app.get('/search', function(req, res) {
   console.log(req.query);
+  req.query.course = req.query.course.toUpperCase();
   db.collection('polls').find(req.query).toArray(function(err, docs) {
     console.log(docs);
-    return res.render('search', {
-      "polls": docs,
-      "course": req.query.course.toUpperCase()
-    });
+    return res.json(docs);
   });
 });
 
+// Create a poll
 app.post('/polls', function(req, res) {
   console.log(req.body);
   // Validation
-  if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.date || !req.body.size) {
+  if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.size) {
 	console.log("bad request");
     return res.sendStatus(400);
   }
@@ -149,7 +149,7 @@ app.post('/polls', function(req, res) {
       title: req.body.title,
       description: req.body.description,
       course: req.body.course,
-	  date: req.body.date,
+	  date: new Date,
 	  size: req.body.size,
 	  questions: req.body.questions
     }, function(err, result) {
@@ -160,7 +160,7 @@ app.post('/polls', function(req, res) {
   });
 });
 
-// Need testing
+// Get a poll with the creator uid
 app.get('/polls', function(req, res) {
   db.collection('polls').find({
     creator: req.body.uid
@@ -170,13 +170,62 @@ app.get('/polls', function(req, res) {
   });
 });
 
-// Need testing
+// Get a poll given the pid
 app.get('/polls/:pid', function(req, res) {
   db.collection('polls').find({
     _id: parseInt(req.params.pid)
   }).toArray(function(err, docs) {
     console.log(docs);
 	return res.json(docs[0]);
+  });
+});
+
+// Update a poll
+app.put('/polls/:pid', function(req, res) {
+  // Validation
+  if (!req.body.creator && !req.body.title && !req.body.description && !req.body.size && !req.body.course && !req.body.questions) {
+	console.log("bad request");
+    return res.sendStatus(400);
+  }
+  
+  // Set update JSON
+  var updateJSON = {};
+  if (req.body.title)
+    updateJSON.title = req.body.title;
+  if (req.body.description)
+    updateJSON.description = req.body.description;
+  if (req.body.size)
+    updateJSON.size = req.body.size;
+  updateJSON.date = new Date();
+  if (req.body.course)
+    updateJSON.course = req.body.course;
+  if (req.body.questions)
+    updateJSON.questions = req.body.questions;
+  // Update
+  db.collection('polls').updateOne({
+    _id: parseInt(req.params.pid)
+  }, {
+    $set: updateJSON
+  }, function(err, result) {
+    if (result.matchedCount == 1) {
+      res.sendStatus(200);
+    } else {
+      // The poll doesn't exist
+      res.sendStatus(403);
+    }
+  });
+});
+
+//delete a poll
+app.delete('/polls/:pid', function(req, res) {
+  db.collection('polls').deleteOne({
+    _id: parseInt(req.params.pid)
+  }, function(err, result){
+    if(result.deletedCount == 1){
+      return res.sendStatus(200);
+    } else{
+      return res.sendStatus(403);
+    }
   });
 });
 
@@ -300,7 +349,7 @@ app.get('/groups/:uid', function(req, res) {
 app.post('/groups/:pid/member', function(req, res) {
    db.collection('groups').updateOne({
        pid: parseInt(req.params.pid),
-       members: {$nin [req.uid]}
+       members: {$nin: [req.uid]}
    },{
        $push: {members: req.uid}
    }, function(err, result){
@@ -316,7 +365,7 @@ app.post('/groups/:pid/member', function(req, res) {
 app.delete('/groups/:pid/member', function(req, res) {
    db.collection('groups').updateOne({
        pid: parseInt(req.params.pid),
-       members: {$in [req.uid]}
+       members: {$in: [req.uid]}
    },{
        $pull: {members: req.uid}
    }, function(err, result){
