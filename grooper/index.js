@@ -129,6 +129,31 @@ app.put('/user/:uid', function(req, res) {
   });
 });
 
+// Update user course history information
+app.put('/user/:uid/courses', function(req, res) {
+  if (!req.body.course || !req.body.status)
+    return res.sendStatus(400);
+
+  var course = req.body.course;
+  var status = req.body.status;
+
+  db.collection('users').update({
+    _id: parseInt(req.params.uid)
+  }, {
+    $set: {
+      status: {
+        course
+      }
+    }
+  }, function(err, result) {
+    if (result.nMatched == 1) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(403);
+    }
+  });
+});
+
 // Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
