@@ -1,6 +1,7 @@
 ![logo](grooper/assets/images/logo.png)
 
 Grooper is a web application that helps students find groups for courses. It uses a “Poll” interface to find the groups and match the teammates. When a user creates a poll, the creator can give a short description of his/her group’s project. To help with the choosing process, the creator can add questions as an “Application form” to the poll which will be asked to the other. Users who are interested in the group after viewing the description will submit their responses to the application form. Then the creator of the poll can choose his/her teammates from the list of applicants. Once all the teammates are confirmed, the group is closed and the poll is removed.
+
 ---
 
 ## What has been done for Phase 3?
