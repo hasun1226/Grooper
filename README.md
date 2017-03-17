@@ -6,7 +6,7 @@ Grooper is a web application that helps students find groups for courses. It use
 Roughly 85% of the features including posting, displaying, editing, and sorting by time are now virtually working. 10 necessary features, which are of login management and searching mechanisms, are still pending out of the 64 features outlined in [Phase1_updated](Phase1_updated.pdf).
 
 #### [Back-end development](grooper/index.js)
-23 main APIs are defined. Please refer to the [setup instruction](grooper/Readme.md) to run the back-end
+23 main APIs are defined. Please refer to the [setup instruction](grooper/README.md) to run the back-end
 
 #### API documentation
 Shows Method, Endpoint, Description, Input JSON, Output JSON, Failure
