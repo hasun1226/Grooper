@@ -217,7 +217,7 @@ app.post('/polls', function(req, res) {
   });
 });
 
-// Get a poll with the creator uid
+// Get polls created by a user
 app.get('/polls', function(req, res) {
   // Check if the user with uid exists
   db.collection('users').find({
@@ -229,7 +229,6 @@ app.get('/polls', function(req, res) {
   db.collection('polls').find({
     creator: req.body.uid
   }).toArray(function(err, docs) {
-    console.log(docs);
 	return res.json(docs);
   });
 });
@@ -242,8 +241,16 @@ app.get('/polls/:pid', function(req, res) {
     // If the poll with pid doesn't exist
     if (docs.length == 0)
       return res.sendStatus(403);
-    console.log(docs);
-	return res.json(docs[0]);
+    db.collection('applications').find({
+      pid: parseInt(req.params.pid)
+	}).toArray(function(error, result) {
+      var target = {};
+      var poll = docs[0];
+	  
+      for(var key in poll) target[key] = poll[key];
+      target['applications'] = result;
+      return res.json(target);
+	});
   });
 });
 
