@@ -69,6 +69,7 @@ var ApplicationSchema = new Schema (
 var GroupSchema = new Schema (
   {
     pid: { type: Number, required: true },
+	owner: { type: Number, required: true },
 	members: [{ type: Number }]
   },
   {

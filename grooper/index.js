@@ -112,7 +112,7 @@ app.put('/user/:uid', function(req, res) {
   if (req.body.name)
     updateJSON.name = req.body.name;
   if (req.body.email)
-    updateJSON.email = req.body.name;
+    updateJSON.email = req.body.email;
   if (req.body.phone)
     updateJSON = req.body.phone;
 
@@ -188,6 +188,8 @@ app.post('/polls', function(req, res) {
   if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.size)
     return res.sendStatus(400);
 
+  if (!req.body.questions)
+    req.body.questions = [];
   // Check if the creator exists
   db.collection('users').find({
     _id: req.body.creator
@@ -328,19 +330,21 @@ app.get('/applications/:uid', function(req, res){
   db.collection('users').find({
     _id: parseInt(req.params.uid)
   }).toArray(function(err, docs) {
-    if (docs.length == 0)
+    // Check if the user with uid exists
+    if (docs.length == 0) {
       return res.sendStatus(403);
-  });
-
-  db.collection('applications').find({
-  	uid: parseInt(req.params.uid)
-  }).toArray(function(err, docs) {
-  	console.log(docs);
-  	return res.json(docs);
+    } else {
+      db.collection('applications').find({	
+        uid: parseInt(req.params.uid)
+      }).toArray(function(err, docs) {
+        console.log(docs);
+	    return res.json(docs);
+      });
+    }
   });
 });
 
-// update status of application
+// Update of application
 app.put('/applications', function(req, res){
   //validation
   if (!req.body.uid || !req.body.pid)
@@ -369,7 +373,6 @@ app.put('/applications', function(req, res){
 	  res.sendStatus(200);
 	});
   })
-
 });
 
 // delete application
@@ -387,49 +390,83 @@ app.delete('/applications', function(req, res){
   });
 });
 
-//create a new group
+// Create a new group
 app.post('/groups/:pid', function(req, res) {
   if(!req.body.creator){
-    console.log('bad request');
+    // Creator is not given
     return res.sendStatus(400);
   }
-  db.collection('groups')
-  db.collection('groups').insertOne({
-    pid: req.params.pid,
-    members: [req.body.creator]
-  }, function(err, result) {
-    return res.sendStatus(200);
+  
+  db.collection('polls').find({
+    _id: parseInt(req.params.pid)
+  }).toArray(function(err, docs) {
+    // Poll does not exist
+    if (docs.length == 0)
+      return res.sendStatus(400);
+    db.collection('users').find({
+      _id: req.body.creator
+    }).toArray(function(error, result) {
+      // Creator does not exist or is not the creator of the poll
+      if (result.length == 0 || result[0]._id != docs[0].creator)
+        return res.sendStatus(400);
+      db.collection('groups').insertOne({
+        pid: parseInt(req.params.pid),
+        owner: req.body.creator,
+        members: []
+      }, function(fail, success) {
+        return res.sendStatus(200);
+      });	  
+    });
   });
 });
 
-//get all the groups for a user
-app.get('/groups/:uid', function(req, res) {
-   db.collection('groups').find({
-       members: {$in: [parseInt(req.params.uid)]}
-   }).toArray(function(err, docs) {
-    var groups = [];
-    for (var i = 0; i < docs.length; i++){
-        groups.push(docs[i].pid);
-    }
-    console.log(docs);
-	return res.json({groups});
+// Get all the groups for a user
+app.get('/groups', function(req, res) {
+  var uid = req.body.uid;
+  
+  db.collection('users').find({
+    _id: uid
+  }).toArray(function(err, docs) {
+    // User does not exist
+    if (docs.length == 0)
+      return res.sendStatus(400);
+    db.collection('groups').find({
+      $or: [ { members: { $in: [ uid ] } }, { owner: { $in: [ uid ] } } ]
+    }).toArray(function(error, result) {
+      var groups = [];
+	  for (var i = 0; i < result.length; i++) {
+        groups.push(result[i].pid);
+      }
+	  return res.json({ groups });
+    });
   });
 });
 
-//add a member to a group
+// Get a group
+app.get('/groups/:pid', function(req, res) {
+  db.collection('groups').find({
+    pid: parseInt(req.params.pid)
+  }).toArray(function(err, docs) {
+    if (docs.length == 0)
+      return res.sendStatus(400);
+    return res.json(docs[0]);
+  });
+});
+
+// Add a member to a group
 app.post('/groups/:pid/member', function(req, res) {
-   db.collection('groups').updateOne({
-       pid: parseInt(req.params.pid),
-       members: {$nin: [req.uid]}
-   },{
-       $push: {members: req.uid}
-   }, function(err, result){
-       if(result.modifiedCount == 1){
-           res.sendStatus(200);
-       } else{
-           res.sendStatus(403);
-       }
-   });
+  db.collection('groups').updateOne({
+    pid: parseInt(req.params.pid),
+    members: {$nin: [req.uid]}
+  },{
+    $push: {members: req.uid}
+  }, function(err, result){
+    if(result.modifiedCount == 1){
+      res.sendStatus(200);
+    } else{
+      res.sendStatus(403);
+    }
+  });
 });
 
 //delete a member from a group
@@ -448,25 +485,15 @@ app.delete('/groups/:pid/member', function(req, res) {
    });
 });
 
-//get a group
-app.get('/groups/:pid', function(req, res) {
-   db.collection('groups').find({
-       pid: parseInt(req.params.pid)
-   }).toArray(function(err, docs) {
-    console.log(docs);
-	return res.json(docs[0]);
-  });
-});
-
 //delete a group
 app.delete('/groups/:pid', function(req, res) {
-    db.collection('groups').deleteOne({
-        pid: parseInt(req.params.pid)
-    }, function(err, result){
-        if(result.deletedCount == 1){
-            return res.sendStatus(200);
-        } else{
-            return res.sendStatus(403);
-        }
-    });
+  db.collection('groups').deleteOne({
+    pid: parseInt(req.params.pid)
+  }, function(err, result){
+    if(result.deletedCount == 1){
+      return res.sendStatus(200);
+    } else{
+      return res.sendStatus(403);
+    }
+  });
 });
