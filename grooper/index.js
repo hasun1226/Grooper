@@ -103,6 +103,32 @@ app.delete('/users/:uid', function(req, res) {
   });
 });
 
+// Update user information (name, email, phone)
+app.put('/user/:uid', function(req, res) {
+  if (!req.body.name && !req.body.email && !req.body.phone)
+    return res.sendStatus(400);
+
+  var updateJSON = {};
+  if (req.body.name)
+    updateJSON.name = req.body.name;
+  if (req.body.email)
+    updateJSON.email = req.body.name;
+  if (req.body.phone)
+    updateJSON = req.body.phone;
+
+  db.collection('users').updateOne({
+    _id: parseInt(req.params.uid)
+  }, {
+    $set: updateJSON
+  }, function(err, result) {
+    if (result.matchedCount == 1) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(403);
+    }
+  });
+});
+
 // Login should return something to keep the user session
 app.post('/login', function(req, res) {
   // Validation: the input fields are empty
@@ -199,7 +225,7 @@ app.put('/polls/:pid', function(req, res) {
   // Validation
   if (!req.body.creator && !req.body.title && !req.body.description && !req.body.size && !req.body.course && !req.body.questions)
     return res.sendStatus(400);
-  
+
   // Set update JSON
   var updateJSON = {};
   if (req.body.title)
@@ -253,7 +279,7 @@ app.post('/applications', function(req, res){
     // Check if the poll exists
     if (docs.length == 0)
   	  return res.sendStatus(403);
-  
+
     // Check if the applicant is the creator of the poll
     if (docs[0].creator == req.body.uid)
       return res.sendStatus(403);
@@ -280,7 +306,7 @@ app.get('/applications/:uid', function(req, res){
     if (docs.length == 0)
       return res.sendStatus(403);
   });
-  
+
   db.collection('applications').find({
   	uid: parseInt(req.params.uid)
   }).toArray(function(err, docs) {
