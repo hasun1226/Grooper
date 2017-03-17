@@ -62,7 +62,8 @@ app.post('/users', function (req, res) {
         name: req.body.name,
         phone: req.body.phone,
         email: req.body.email,
-        pw: req.body.pw
+        pw: req.body.pw,
+		course_history: []
       }, function(err, result) {
 		return res.json({
 		  _id: result.insertedId
@@ -79,11 +80,25 @@ app.get('/users/:uid', function(req, res) {
   }).toArray(function(err, result) {
     if (result.length == 0)
       return res.sendStatus(403);
-    console.log(result);
+
     return res.json({
       name: result[0].name,
       email: result[0].email,
       phone: result[0].phone
+    });
+  });
+});
+
+// Retrieve course history of the user
+app.get('/users/:uid/courses', function(req, res) {
+  db.collection('users').find({
+    _id: parseInt(req.params.uid)
+  }).toArray(function(err, result) {
+    if (result.length == 0)
+      return res.sendStatus(403);
+
+    return res.json({
+      course_history: result[0].course_history
     });
   });
 });
@@ -104,8 +119,8 @@ app.delete('/users/:uid', function(req, res) {
 });
 
 // Update user information (name, email, phone)
-app.put('/user/:uid', function(req, res) {
-  if (!req.body.name && !req.body.email && !req.body.phone)
+app.put('/users/:uid', function(req, res) {
+  if (!req.body.name && !req.body.email && !req.body.phone && !req.body.pw)
     return res.sendStatus(400);
 
   var updateJSON = {};
@@ -115,6 +130,8 @@ app.put('/user/:uid', function(req, res) {
     updateJSON.email = req.body.email;
   if (req.body.phone)
     updateJSON = req.body.phone;
+  if (req.body.pw)
+    updateJSON = req.body.pw;
 
   db.collection('users').updateOne({
     _id: parseInt(req.params.uid)
@@ -129,29 +146,50 @@ app.put('/user/:uid', function(req, res) {
   });
 });
 
-// Update user course history information
-app.put('/user/:uid/courses', function(req, res) {
+// Add a course history information
+app.post('/users/:uid/courses', function(req, res) {
   if (!req.body.course || !req.body.status)
     return res.sendStatus(400);
 
-  var course = req.body.course;
-  var status = req.body.status;
-
-  db.collection('users').update({
+  db.collection('users').find({
     _id: parseInt(req.params.uid)
-  }, {
-    $set: {
-      status: {
-        course
+  }).toArray(function(err, docs) {
+    // User does not exist
+    if (docs.length == 0)
+      return res.sendStatus(403);
+	docs.update({
+      course: {$nin: [req.body.course]}
+	}, {
+      $push: {course_history:
+	    {
+          course: req.body.course,
+          status: req.body.status
+        }
       }
-    }
-  }, function(err, result) {
-    if (result.nMatched == 1) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(403);
-    }
+    }, function(err, result){
+      if(result.modifiedCount == 1){
+        res.sendStatus(200);
+      } else{
+        res.sendStatus(403);
+      }
+	});
   });
+});
+
+// Delete a course history
+app.delete('/users/:uid/courses', function(req, res) {
+   db.collection('groups').updateOne({
+       pid: parseInt(req.params.pid),
+       members: {$in: [req.body.uid]}
+   },{
+       $pull: {members: req.body.uid}
+   }, function(err, result){
+       if(result.modifiedCount == 1){
+           return res.sendStatus(200);
+       } else{
+           return res.sendStatus(403);
+       }
+   });
 });
 
 // Login should return something to keep the user session
@@ -336,7 +374,7 @@ app.post('/applications', function(req, res){
   	  uid: req.body.uid,
   	  pid: req.body.pid,
   	  status: 0, // 0 is waiting
-	  date: new Date();
+	  date: new Date(),
   	  answers: req.body.answers
   	}, function(err, result){
   	  return res.sendStatus(200);
@@ -436,8 +474,8 @@ app.post('/groups/:pid', function(req, res) {
       db.collection('groups').insertOne({
         pid: parseInt(req.params.pid),
         owner: req.body.creator,
-        members: []
-		date: new Date();
+        members: [],
+		date: new Date()
       }, function(fail, success) {
         return res.sendStatus(200);
       });	  
@@ -484,27 +522,41 @@ app.get('/groups/:pid', function(req, res) {
 
 // Add a member to a group
 app.post('/groups/:pid/member', function(req, res) {
-  db.collection('groups').updateOne({
-    pid: parseInt(req.params.pid),
-    members: {$nin: [req.uid]}
-  },{
-    $push: {members: req.uid}
-  }, function(err, result){
-    if(result.modifiedCount == 1){
-      res.sendStatus(200);
-    } else{
-      res.sendStatus(403);
-    }
+  db.collection('users').find({
+    _id: req.body.uid
+  }).toArray(function(err, docs) {
+    // User does not exist
+    if (docs.length == 0)
+      return res.sendStatus(400);
+    db.collection('groups').find({
+      pid: parseInt(req.params.pid)
+    }).toArray(function (err, group) {
+      // Cannot add a creator as a member
+      if (group[0].owner == req.body.uid)
+        return res.sendStatus(403);
+      db.collection('groups').updateOne({
+        pid: parseInt(req.params.pid),
+        members: {$nin: [req.body.uid]}
+      },{
+        $push: {members: req.body.uid}
+      }, function(err, result){
+        if(result.modifiedCount == 1){
+          res.sendStatus(200);
+        } else{
+          res.sendStatus(403);
+        }
+      });
+	});
   });
 });
 
-//delete a member from a group
+// Delete a member from a group
 app.delete('/groups/:pid/member', function(req, res) {
    db.collection('groups').updateOne({
        pid: parseInt(req.params.pid),
-       members: {$in: [req.uid]}
+       members: {$in: [req.body.uid]}
    },{
-       $pull: {members: req.uid}
+       $pull: {members: req.body.uid}
    }, function(err, result){
        if(result.modifiedCount == 1){
            return res.sendStatus(200);

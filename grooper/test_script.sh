@@ -5,11 +5,19 @@ curl -v -H "Content-Type: application/json" -X POST -d \
 '{"name":"username", "email":"user@utoronto.ca", "phone":4161111111, "pw":"password"}' \
 http://localhost:3000/users
 
-read -p $'\nUpdate user information'
+read -p $'\nUpdate user name, Forbidden if the user does not exist, Bad request if the fields are empty'
+curl -v -H "Content-Type: application/json" -X PUT -d '{"name":"myName"}' http://localhost:3000/users/1
 
-
-read -p $'\nGet user1, Forbidden if the user does not exist'
+read -p $'\nGet user1 information, Forbidden if the user does not exist'
 curl -v -H "Content-Type: application/json" -X GET http://localhost:3000/users/1
+
+
+read -p $'\nUpdate course history, Forbidden if the user does not exist, Bad request if the fields are empty'
+curl -v -H "Content-Type: application/json" -X PUT -d '{"name":"myName"}' http://localhost:3000/users/1
+
+
+read -p $'\nGet course history of the user, Forbidden if the user does not exist'
+curl -v -H "Content-Type: application/json" -X GET http://localhost:3000/users/1/courses
 
 read -p $'\nCreate a poll, Bad request if a field other than questions is missing'
 curl -v -H "Content-Type: application/json" -X POST -d \
@@ -59,10 +67,12 @@ read -p $'\nUpdate the status of the application by inviting user2'
 curl -v -H "Content-Type: application/json" -X PUT -d '{"uid":2, "pid":1, status":1}' http://localhost:3000/applications
 
 read -p $'\nUpdate the status of the application to indicate that user2 accepted the invitation'
-curl -v -H "Content-Type: application/json" -X PUT -d '{"uid":2, "pid":1, "status":2}' http://localhost:3000/applications
+curl -v -H "Content-Type: application/json" -X PUT -d '{"uid":2, "pid":1, "status":2}' \
+http://localhost:3000/applications
 
-read -p $'\nAdd a member to the group'
-
+read -p $'\nAdd a member to the group, Bad request if the user does not exist'
+read -p $'\Forbidden if the poll does not exist, the user is already a member, or the user is the group owner'
+curl -v -H "Content-Type: application/json" -X POST -d '{"uid":2}' http://localhost:3000/groups/1/member
 
 read -p $'\nGet the group with id=1, Bad request if the group does not exist'
 curl -v -H "Content-Type: application/json" -X GET http://localhost:3000/groups/1
@@ -74,8 +84,8 @@ read -p $'\nDelete application for poll with pid=1 created by user2'
 read -p $'\nForbidden if the application does not exist'
 curl -v -H "Content-Type: application/json" -X DELETE -d '{"uid":2, "pid":1}' http://localhost:3000/applications
 
-read -p $'\nDelete a user with uid=1, Forbidden if the user does not exist'
-curl -v -H "Content-Type: application/json" -X DELETE http://localhost:3000/users/1
-
 read -p $'\nDelete a group with id=1, Forbidden if the group does not exist'
 curl -v -H "Content-Type: application/json" -X DELETE http://localhost:3000/groups/1
+
+read -p $'\nDelete a user with uid=1, Forbidden if the user does not exist'
+curl -v -H "Content-Type: application/json" -X DELETE http://localhost:3000/users/1
