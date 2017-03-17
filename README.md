@@ -8,13 +8,13 @@ Grooper is a web application that helps students find groups for courses. It use
 Roughly 85% of the features including posting, displaying, editing, and sorting by time are now virtually working. 10 necessary features, which are of login management and searching mechanisms, are still pending out of the 64 features outlined in [Phase1_updated](Phase1_updated.pdf).
 
 ### [Back-end development](grooper/index.js)
-23 main APIs are defined. Please refer to the [setup instruction](grooper/README.md) to run the back-end
+23 main APIs are completed. Please refer to the [setup instruction](grooper/README.md) to run the back-end.
 
 ### [API documentation](Grooper_API.pdf)
-Shows Method, Endpoint, Description, Input JSON, Output JSON, Failure
+Shows Method, Endpoint, Description, Input JSON, Output JSON, Failure. APIs with red letters, which are /login and /logout, mean they are not fully complete.
 
 ### [test-script](grooper/test_script.sh)
-Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided). After running all the commands, the resulting data will be as [users.json](grooper/model/users.json)
+Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided). After running all the commands, the resulting data will be as [users.json](grooper/model/users.json).
 
 ### Notable attributes
  * Divided GET user info into two parts: basic profile and course history
@@ -24,7 +24,7 @@ Describes the behaviors including successful curl commands and when they will fa
  * POST to /users is connected with front-end
    * Can register through [http://localhost:3000/register](http://localhost:3000/register)
    * POST to /polls is partially connected with front-end (questions fields will be passed as an empty array)
- * GET /login is defined, but the session is yet to be managed
+   * GET /login is defined, but the session is yet to be managed
  
 ### To Do (Prioritized: Highest to lowest)
  1. Login management
