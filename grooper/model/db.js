@@ -14,9 +14,9 @@ var UserSchema = new Schema(
     pw: 
 	  { type: String, required: true },
 	curr_course:
-	  [ { type: String, required: true } ],
+	  [ { course: { type: String, required: true } } ],
 	prev_course:
-	  [ { type: String, required: true } ]
+	  [ { course: { type: String, required: true } } ]
   },
   {
     collection: 'users'
