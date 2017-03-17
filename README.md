@@ -22,7 +22,7 @@ Describes the behaviors including successful curl commands and when they will fa
    * When displaying the members for the group, only the basic profile is displayed
    * Filtering applicants based on the course history is considered to be an extra feature
  * POST to /users is connected with front-end
-   * Can register through [http://localhost:3000/register]
+   * Can register through [http://localhost:3000/register](http://localhost:3000/register)
    * POST to /polls is partially connected with front-end (questions fields will be passed as an empty array)
  * GET /login is defined, but the session is yet to be managed
  
