@@ -178,6 +178,10 @@ app.post('/login', function(req, res) {
 app.get('/search', function(req, res) {
   req.query.course = req.query.course.toUpperCase();
   db.collection('polls').find(req.query).toArray(function(err, docs) {
+    // Sort by date: the first item is the most recently created/updated
+    docs.sort(function(a, b) { 
+      return a.date.getTime() < b.date.getTime(); 
+    });
     return res.json(docs);
   });
 });
@@ -229,6 +233,10 @@ app.get('/polls', function(req, res) {
   db.collection('polls').find({
     creator: req.body.uid
   }).toArray(function(err, docs) {
+    // Sort by date: the first item is the most recently created/updated
+    docs.sort(function(a, b) { 
+      return a.date.getTime() < b.date.getTime(); 
+    });
 	return res.json(docs);
   });
 });
@@ -246,7 +254,11 @@ app.get('/polls/:pid', function(req, res) {
 	}).toArray(function(error, result) {
       var target = {};
       var poll = docs[0];
-	  
+      // Sort by date: the first item is the most recently created/updated
+      result.sort(function(a, b) { 
+        return a.date.getTime() < b.date.getTime(); 
+      });
+
       for(var key in poll) target[key] = poll[key];
       target['applications'] = result;
       return res.json(target);
@@ -324,6 +336,7 @@ app.post('/applications', function(req, res){
   	  uid: req.body.uid,
   	  pid: req.body.pid,
   	  status: 0, // 0 is waiting
+	  date: new Date();
   	  answers: req.body.answers
   	}, function(err, result){
   	  return res.sendStatus(200);
@@ -344,7 +357,10 @@ app.get('/applications/:uid', function(req, res){
       db.collection('applications').find({	
         uid: parseInt(req.params.uid)
       }).toArray(function(err, docs) {
-        console.log(docs);
+        // Sort by date: the first item is the most recently created/updated
+        docs.sort(function(a, b) { 
+          return a.date.getTime() < b.date.getTime(); 
+        });
 	    return res.json(docs);
       });
     }
@@ -369,6 +385,7 @@ app.put('/applications', function(req, res){
   	var updateJSON = {}
 	if (req.body.status)
 	  updateJSON.status = req.body.status;
+    updateJSON.date = new Date();
 	if (req.body.answers)
 	  updateJSON.answers = req.body.answers;
 	db.collection('applications').updateOne({
@@ -420,6 +437,7 @@ app.post('/groups/:pid', function(req, res) {
         pid: parseInt(req.params.pid),
         owner: req.body.creator,
         members: []
+		date: new Date();
       }, function(fail, success) {
         return res.sendStatus(200);
       });	  
@@ -440,6 +458,10 @@ app.get('/groups', function(req, res) {
     db.collection('groups').find({
       $or: [ { members: { $in: [ uid ] } }, { owner: { $in: [ uid ] } } ]
     }).toArray(function(error, result) {
+      // Sort by date: the first item is the most recently created/updated
+      result.sort(function(a, b) { 
+        return a.date.getTime() < b.date.getTime(); 
+      });
       var groups = [];
 	  for (var i = 0; i < result.length; i++) {
         groups.push(result[i].pid);

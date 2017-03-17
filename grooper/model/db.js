@@ -55,6 +55,7 @@ var ApplicationSchema = new Schema (
 	pid: { type: Number, required: true },
 	// 0: waiting, 1: invited, 2: accepted
 	status: { type: Number, required: true },
+	date: { type: Date, required: true },
 	//answer is an array because it could have multiple answers
 	answers: [{
 	  question: { type: Number, required: true }, 
@@ -70,7 +71,8 @@ var GroupSchema = new Schema (
   {
     pid: { type: Number, required: true },
 	owner: { type: Number, required: true },
-	members: [{ type: Number }]
+	members: [{ type: Number }],
+	date: { type: Date, required: true }
   },
   {
     collection: 'group'
