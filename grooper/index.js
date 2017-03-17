@@ -43,7 +43,6 @@ app.get('/dashboard', function(req, res) {
 
 // Create user
 app.post('/users', function (req, res) {
-	console.log(req.body);
   // Validation
   if (!req.body.name || !req.body.email || !req.body.phone || !req.body.pw) {
 	console.log("bad request");
@@ -78,11 +77,13 @@ app.get('/users/:uid', function(req, res) {
   db.collection('users').find({
     _id: parseInt(req.params.uid)
   }).toArray(function(err, result) {
+    if (result.length == 0)
+      return res.sendStatus(403);
     console.log(result);
     return res.json({
-      name: result.name,
-      email: result.email,
-      phone: result.phone
+      name: result[0].name,
+      email: result[0].email,
+      phone: result[0].phone
     });
   });
 });
@@ -90,7 +91,7 @@ app.get('/users/:uid', function(req, res) {
 // Delete a user
 // TODO: Make sure only the user itself or an admin can delete the user
 app.delete('/users/:uid', function(req, res) {
-  db.collection('user').deleteOne({
+  db.collection('users').deleteOne({
     _id: parseInt(req.params.uid)
   }, function(err, result){
     if (result.deletedCount == 1){
@@ -124,22 +125,25 @@ app.post('/login', function(req, res) {
 
 // Search polls in course
 app.get('/search', function(req, res) {
-  console.log(req.query);
   req.query.course = req.query.course.toUpperCase();
   db.collection('polls').find(req.query).toArray(function(err, docs) {
-    console.log(docs);
     return res.json(docs);
   });
 });
 
 // Create a poll
 app.post('/polls', function(req, res) {
-  console.log(req.body);
   // Validation
-  if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.size) {
-	console.log("bad request");
+  if (!req.body.creator || !req.body.title || !req.body.description || !req.body.course || !req.body.size)
     return res.sendStatus(400);
-  }
+
+  // Check if the creator exists
+  db.collection('users').find({
+    _id: req.body.creator
+  }).toArray(function(err, docs) {
+    if (docs.length == 0)
+      return res.sendStatus(403);
+  });
 
   // Insert into database
   autoIncrement.getNextSequence(db, 'polls', function (err, autoIndex) {
@@ -162,6 +166,13 @@ app.post('/polls', function(req, res) {
 
 // Get a poll with the creator uid
 app.get('/polls', function(req, res) {
+  // Check if the user with uid exists
+  db.collection('users').find({
+    _id: req.body.uid
+  }).toArray(function(err, docs) {
+    if (docs.length == 0)
+      return res.sendStatus(403);
+  });
   db.collection('polls').find({
     creator: req.body.uid
   }).toArray(function(err, docs) {
@@ -175,6 +186,9 @@ app.get('/polls/:pid', function(req, res) {
   db.collection('polls').find({
     _id: parseInt(req.params.pid)
   }).toArray(function(err, docs) {
+    // If the poll with pid doesn't exist
+    if (docs.length == 0)
+      return res.sendStatus(403);
     console.log(docs);
 	return res.json(docs[0]);
   });
@@ -183,10 +197,8 @@ app.get('/polls/:pid', function(req, res) {
 // Update a poll
 app.put('/polls/:pid', function(req, res) {
   // Validation
-  if (!req.body.creator && !req.body.title && !req.body.description && !req.body.size && !req.body.course && !req.body.questions) {
-	console.log("bad request");
+  if (!req.body.creator && !req.body.title && !req.body.description && !req.body.size && !req.body.course && !req.body.questions)
     return res.sendStatus(400);
-  }
   
   // Set update JSON
   var updateJSON = {};
@@ -216,7 +228,7 @@ app.put('/polls/:pid', function(req, res) {
   });
 });
 
-//delete a poll
+// Delete a poll
 app.delete('/polls/:pid', function(req, res) {
   db.collection('polls').deleteOne({
     _id: parseInt(req.params.pid)
@@ -230,62 +242,55 @@ app.delete('/polls/:pid', function(req, res) {
 });
 
 // Add a new application
-app.post('applications', function(req, res){
+app.post('/applications', function(req, res){
   // Validation
-  if (!req.body.uid || !req.body.pid || !req.body.answers){
-  	console.log("Error occured when adding application!");
+  if (!req.body.uid || !req.body.pid || !req.body.answers)
   	return res.sendStatus(400);
-  }
-  // check if the poll exist
-  db.collection('polls').count({
+
+  db.collection('polls').find({
   	_id: req.body.pid
-  }, function(err, count){
-  	if (count == 0){
+  }).toArray(function(err, docs) {
+    // Check if the poll exists
+    if (docs.length == 0)
   	  return res.sendStatus(403);
-  	}
-  	// insert application into database
+  
+    // Check if the applicant is the creator of the poll
+    if (docs[0].creator == req.body.uid)
+      return res.sendStatus(403);
+
+	console.log(req.body);
+  	// Insert application into database
   	db.collection('applications').insertOne({
   	  uid: req.body.uid,
   	  pid: req.body.pid,
   	  status: 0, // 0 is waiting
   	  answers: req.body.answers
   	}, function(err, result){
-  	  res.json({ // don't know if this is necessary
-  	  	uid: req.body.uid,
-  	  	pid: req.body.pid
-  	  });
-  	  // res.sendStatus(200);
-  	});
-  });
-});
-
-// delete application
-app.delete('applications', function(req, res){
-  db.collection('applications').deleteOne({
-  	uid: req.body.uid,
-  	pid: req.body.pid
-  }, function(err, result){
-  	if (result.deletedCount == 1){
   	  return res.sendStatus(200);
-  	}
-  	else {
-  	  return res.sendStatus(403);
-  	}
+  	});
   });
 });
 
 // Get all the applications for a user
 app.get('/applications/:uid', function(req, res){
+  // Check if the user with uid exists
+  db.collection('users').find({
+    _id: parseInt(req.params.uid)
+  }).toArray(function(err, docs) {
+    if (docs.length == 0)
+      return res.sendStatus(403);
+  });
+  
   db.collection('applications').find({
   	uid: parseInt(req.params.uid)
-  }).toArray(function(err, docs){
-  	cosnsole.log(docs);
-  	return res.json(docs)
+  }).toArray(function(err, docs) {
+  	console.log(docs);
+  	return res.json(docs);
   });
 });
 
 // update status of application
-app.put('applications', function(req, res){
+app.put('/applications', function(req, res){
   //validation
   if (!req.body.uid || !req.body.pid)
   	return res.sendStatus(400);
@@ -314,6 +319,21 @@ app.put('applications', function(req, res){
 	});
   })
 
+});
+
+// delete application
+app.delete('/applications', function(req, res){
+  db.collection('applications').deleteOne({
+  	uid: req.body.uid,
+  	pid: req.body.pid
+  }, function(err, result){
+  	if (result.deletedCount == 1){
+  	  return res.sendStatus(200);
+  	}
+  	else {
+  	  return res.sendStatus(403);
+  	}
+  });
 });
 
 //create a new group
