@@ -155,16 +155,16 @@ app.post('/users/:uid/courses', function(req, res) {
     _id: parseInt(req.params.uid)
   }).toArray(function(err, docs) {
     // User does not exist
-    if (docs.length == 0)
+    if (docs.length == 0) {
       return res.sendStatus(403);
-	docs.update({
-      course: {$nin: [req.body.course]}
+	}
+	// Update only if the course is not in the course history
+	db.collection('users').updateOne({
+      _id: parseInt(req.params.uid),
+      "course_history.course": { $nin: [req.body.course] }
 	}, {
       $push: {course_history:
-	    {
-          course: req.body.course,
-          status: req.body.status
-        }
+	    { course: req.body.course, status: req.body.status }
       }
     }, function(err, result){
       if(result.modifiedCount == 1){
@@ -178,18 +178,29 @@ app.post('/users/:uid/courses', function(req, res) {
 
 // Delete a course history
 app.delete('/users/:uid/courses', function(req, res) {
-   db.collection('groups').updateOne({
-       pid: parseInt(req.params.pid),
-       members: {$in: [req.body.uid]}
-   },{
-       $pull: {members: req.body.uid}
-   }, function(err, result){
-       if(result.modifiedCount == 1){
-           return res.sendStatus(200);
-       } else{
-           return res.sendStatus(403);
-       }
-   });
+  if (!req.body.course)
+    return res.sendStatus(400);
+
+  db.collection('users').find({
+    _id: parseInt(req.params.uid)
+  }).toArray(function(err, docs) {
+    // User does not exist
+    if (docs.length == 0)
+      return res.sendStatus(403);
+  
+    db.collection('users').updateOne({
+      _id: parseInt(req.params.uid),
+      "course_history.course": {$in: [req.body.course]}
+    },{
+      $pull: { course_history: { course: req.body.course } }
+    }, function(err, result){
+      if (result.modifiedCount == 1){
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(403);
+      }
+    });
+  });
 });
 
 // Login should return something to keep the user session
@@ -453,32 +464,39 @@ app.delete('/applications', function(req, res){
 });
 
 // Create a new group
-app.post('/groups/:pid', function(req, res) {
-  if(!req.body.creator){
+app.post('/groups', function(req, res) {
+  if(!req.body.creator || !req.body.pid){
     // Creator is not given
     return res.sendStatus(400);
   }
   
   db.collection('polls').find({
-    _id: parseInt(req.params.pid)
+    _id: req.body.pid
   }).toArray(function(err, docs) {
     // Poll does not exist
     if (docs.length == 0)
       return res.sendStatus(400);
     db.collection('users').find({
       _id: req.body.creator
-    }).toArray(function(error, result) {
+    }).toArray(function(err, result) {
       // Creator does not exist or is not the creator of the poll
       if (result.length == 0 || result[0]._id != docs[0].creator)
         return res.sendStatus(400);
-      db.collection('groups').insertOne({
-        pid: parseInt(req.params.pid),
-        owner: req.body.creator,
-        members: [],
-		date: new Date()
-      }, function(fail, success) {
-        return res.sendStatus(200);
-      });	  
+      db.collection('groups').find({
+        pid: req.body.pid
+      }).toArray(function (err, groups) {
+        // Group with pid already exists
+        if (groups.length > 0)
+          return res.sendStatus(403);
+        db.collection('groups').insertOne({
+          pid: req.body.pid,
+          owner: req.body.creator,
+          members: [],
+          date: new Date()
+        }, function(fail, success) {
+          return res.sendStatus(200);
+        });			
+      });
     });
   });
 });
@@ -552,18 +570,21 @@ app.post('/groups/:pid/member', function(req, res) {
 
 // Delete a member from a group
 app.delete('/groups/:pid/member', function(req, res) {
-   db.collection('groups').updateOne({
-       pid: parseInt(req.params.pid),
-       members: {$in: [req.body.uid]}
-   },{
-       $pull: {members: req.body.uid}
-   }, function(err, result){
-       if(result.modifiedCount == 1){
-           return res.sendStatus(200);
-       } else{
-           return res.sendStatus(403);
-       }
-   });
+  if (!req.body.uid)
+    return res.sendStatus(400);
+  
+  db.collection('groups').updateOne({
+    pid: parseInt(req.params.pid),
+    members: {$in: [req.body.uid]}
+  },{
+    $pull: {members: req.body.uid}
+  }, function(err, result){
+    if(result.modifiedCount == 1){
+      return res.sendStatus(200);
+    } else{
+      return res.sendStatus(403);
+    }
+  });
 });
 
 //delete a group
@@ -571,9 +592,9 @@ app.delete('/groups/:pid', function(req, res) {
   db.collection('groups').deleteOne({
     pid: parseInt(req.params.pid)
   }, function(err, result){
-    if(result.deletedCount == 1){
+    if (result.deletedCount == 1){
       return res.sendStatus(200);
-    } else{
+    } else {
       return res.sendStatus(403);
     }
   });

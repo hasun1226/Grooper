@@ -10,11 +10,11 @@ Roughly 85% of the features including posting, displaying, editing, and sorting 
 ### [Back-end development](grooper/index.js)
 23 main APIs are defined. Please refer to the [setup instruction](grooper/README.md) to run the back-end
 
-### API documentation
+### [API documentation](Grooper_API.pdf)
 Shows Method, Endpoint, Description, Input JSON, Output JSON, Failure
 
 ### [test-script](grooper/test_script.sh)
-Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided)
+Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided). After running all the commands, the resulting data will be as [users.json](grooper/model/users.json)
 
 ### Notable attributes
  * Divided GET user info into two parts: basic profile and course history
