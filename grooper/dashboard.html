@@ -53,19 +53,7 @@
 					<h4>My polls</h4>
 				</div>
 				<div class="table_wrapper" id="poll">
-    				<ul>
-						<li>
-							<a href="managepoll.html" class="list-group-item">
-								CSC309-Looking for a hard worker
-								<span class="badge badge-new">New !</span>
-							</a>
-      					</li>
-						<li>
-							<a href="mygroups.html" class="list-group-item">
-								CSC108-Grooper
-								<span class="badge">closed</span>
-							</a>
-      					</li>
+    				<ul id="poll-wrapper">
     				</ul>
   				</div>
   			</div>
@@ -77,24 +65,7 @@
 					<h4>My applications</h4>
 				</div>
 				<div class="table_wrapper" id="applications">
-    				<ul>
-						<li>
-        					<a href="#" class="list-group-item" data-toggle="modal" data-id="1" data-target="#orderModal">
-								CSC309-TA application
-								<span class="badge badge-success">Invited</span>
-							</a>
-      					</li>
-						<li>
-        					<a href="#" class="list-group-item" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">
-								CSC309-Initial Project
-								<span class="badge">Closed</span>
-							</a>
-      					</li>
-      					<li>
-							<a href="#" class="list-group-item" data-toggle="modal" data-id="2" data-target="#orderModal">
-								CSC309-Social Media Application
-							</a>
-      					</li>
+    				<ul id="application-wrapper">
     				</ul>
   				</div>
   			</div>
@@ -106,18 +77,13 @@
 					<h4>My groups</h4>
 				</div>
 				<div class="table_wrapper" id="groups">
-    				<ul>
-      					<li>
-							<a href="mygroups.html" class="list-group-item">
-								CSC108-Grooper
-							</a>
-      					</li>
+    				<ul id="group-wrapper">
     				</ul>
   				</div>
   			</div>
 		</section>
 		
-		<!-- Modal for Group Description -->
+		<!-- Modal for Application Description -->
 	<div class="modal fade" id="orderModal" aria-labelledby="orderModal" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -141,7 +107,7 @@
 			
 			<div class="section-wrapper container-fluid bg-info" id="app-form">
 			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12"></h3></div>
-			  <form class="questions"></form>
+			  <form id="questions-wrapper"></form>
 		  </div><!-- /.modal-body -->
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

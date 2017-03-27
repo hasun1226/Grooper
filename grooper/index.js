@@ -274,19 +274,20 @@ app.post('/polls', function(req, res) {
 app.get('/polls', function(req, res) {
   // Check if the user with uid exists
   db.collection('users').find({
-    _id: req.body.uid
+    _id: parseInt(req.query.uid)
   }).toArray(function(err, docs) {
     if (docs.length == 0)
       return res.sendStatus(403);
-  });
-  db.collection('polls').find({
-    creator: req.body.uid
-  }).toArray(function(err, docs) {
-    // Sort by date: the first item is the most recently created/updated
-    docs.sort(function(a, b) { 
-      return a.date.getTime() < b.date.getTime(); 
+  
+    db.collection('polls').find({
+      creator: parseInt(req.query.uid)
+    }).toArray(function(err, docs) {
+      // Sort by date: the first item is the most recently created/updated
+      docs.sort(function(a, b) { 
+        return a.date.getTime() < b.date.getTime(); 
+      });
+  	return res.json(docs);
     });
-	return res.json(docs);
   });
 });
 
@@ -300,7 +301,7 @@ app.get('/polls/:pid', function(req, res) {
       return res.sendStatus(403);
     db.collection('applications').find({
       pid: parseInt(req.params.pid)
-	}).toArray(function(error, result) {
+	  }).toArray(function(error, result) {
       var target = {};
       var poll = docs[0];
       // Sort by date: the first item is the most recently created/updated
@@ -421,7 +422,7 @@ app.put('/applications', function(req, res){
   //validation
   if (!req.body.uid || !req.body.pid)
   	return res.sendStatus(400);
-  if (!req.body.status && !req.body.answers)
+  if (!(req.body.status || req.body.status === 0) && !req.body.answers)
   	return res.sendStatus(400);
 
   // check if application exist just in case
@@ -432,7 +433,7 @@ app.put('/applications', function(req, res){
   	if (docs.length == 0)
   	  return res.sendStatus(403);
   	var updateJSON = {}
-	if (req.body.status)
+	if (req.body.status || req.body.status === 0)
 	  updateJSON.status = req.body.status;
     updateJSON.date = new Date();
 	if (req.body.answers)
@@ -503,7 +504,7 @@ app.post('/groups', function(req, res) {
 
 // Get all the groups for a user
 app.get('/groups', function(req, res) {
-  var uid = req.body.uid;
+  var uid = parseInt(req.query.uid);
   
   db.collection('users').find({
     _id: uid
@@ -519,10 +520,11 @@ app.get('/groups', function(req, res) {
         return a.date.getTime() < b.date.getTime(); 
       });
       var groups = [];
-	  for (var i = 0; i < result.length; i++) {
-        groups.push(result[i].pid);
-      }
-	  return res.json({ groups });
+  	  for (var i = 0; i < result.length; i++) {
+          groups.push(result[i].pid);
+        }
+      console.log(result);
+  	  return res.json({ groups });
     });
   });
 });
@@ -564,7 +566,7 @@ app.post('/groups/:pid/member', function(req, res) {
           res.sendStatus(403);
         }
       });
-	});
+	  });
   });
 });
 

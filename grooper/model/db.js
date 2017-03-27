@@ -52,7 +52,7 @@ var ApplicationSchema = new Schema (
   {
     uid: { type: Number, required: true },
 	pid: { type: Number, required: true },
-	// 0: waiting, 1: invited, 2: accepted
+	// 0: waiting, 1: invited, 2: accepted, 3: rejected/closed
 	status: { type: Number, required: true },
 	date: { type: Date, required: true },
 	//answer is an array because it could have multiple answers
