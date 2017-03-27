@@ -449,7 +449,7 @@ app.put('/applications', function(req, res){
   })
 });
 
-// delete application
+// Delete application
 app.delete('/applications', function(req, res){
   db.collection('applications').deleteOne({
   	uid: req.body.uid,
@@ -535,7 +535,7 @@ app.get('/groups/:pid', function(req, res) {
     pid: parseInt(req.params.pid)
   }).toArray(function(err, docs) {
     if (docs.length == 0)
-      return res.sendStatus(400);
+      return res.sendStatus(403);
     return res.json(docs[0]);
   });
 });
@@ -561,6 +561,31 @@ app.post('/groups/:pid/member', function(req, res) {
         $push: {members: req.body.uid}
       }, function(err, result){
         if(result.modifiedCount == 1){
+          
+          //check if the group is full
+          db.collection('polls').find({
+              _id: result.pid
+          }).toArray(function(err, poll) {
+              db.collection('groups').find({
+                  pid: poll._id
+              }).toArray(function(err, group) {
+                  if(poll.size == group.members.length + 1) { // group is full now
+                  //set status to closed for all applicants that aren't accepted
+                  db.collection('applications').find({
+                      pid: poll._id
+                  }).toArray(function(err, applicants) {
+                      for (i = 0; i < applicants.length; i++){
+                          if (applicants[i] == req.body.uid){ //accept this member
+                              applicants[i].status = 2;
+                          } else if (applicants[i].status != 2){ //set the status for the rest of the applicants to 3=rejected/closed
+                              applicants[i].status = 3;
+                          }
+                      }
+                  });
+              }
+              })
+              
+          });
           res.sendStatus(200);
         } else{
           res.sendStatus(403);
@@ -589,7 +614,7 @@ app.delete('/groups/:pid/member', function(req, res) {
   });
 });
 
-//delete a group
+// Delete a group
 app.delete('/groups/:pid', function(req, res) {
   db.collection('groups').deleteOne({
     pid: parseInt(req.params.pid)

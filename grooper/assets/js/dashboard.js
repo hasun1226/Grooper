@@ -129,22 +129,86 @@ var add_groups_to_page = function(pid){
         contentType: "application/json; charset=UTF-8",
         success: function(poll){
         	// data should contain the poll and all the related applications
-        	var wrapper = document.getElementById("group-wrapper");
-    		var li = document.createElement('li');
-    		var a = document.createElement('a');
-    		a.className = 'list-group-item';
-    		a.innerHTML = poll.course + '-' + poll.title;
-    		a.href = "mygroups.html";
-    		li.appendChild(a);
-    		wrapper.appendChild(li);
+            add_group_to_page(poll);
         },
         statusCode:{
         	403: function(res){
-				alert("No poll!");
+				alert("The poll does not exist.");
 			}
         }
 	});
 }
+
+var add_group_to_page = function(poll) {
+    var wrapper = document.getElementById("group-wrapper");
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.className = 'list-group-item';
+    a.innerHTML = poll.course + '-' + poll.title;
+    a.href = "#";
+    li.appendChild(a);
+    wrapper.appendChild(li);
+    
+    a.setAttribute('data-pid', poll._id);
+    a.setAttribute('data-toggle', "modal");
+    a.setAttribute('data-target', "#groupModal");
+}
+
+//modal for showing a group
+$('#groupModal').on('show.bs.modal', function(event) {
+    //add data attributes
+    var row = $(event.relatedTarget); // row that is clicked
+	var pid = $(row).data('pid');
+	var modal = $(this);
+    
+    // get the group and its members
+	$.ajax({
+        url: '/groups/' + pid,
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function(group){
+        	console.log("pid: " + pid);
+            $.ajax({
+		        url: '/polls/' + pid,
+		        type: "GET",
+		        dataType: "json",
+		        contentType: "application/json; charset=UTF-8",
+		        success: function(poll){
+                    members = group.members;//new Array(group.members.length);
+                    /*for (var i = 0; i < group.members.length; i++){
+                        memberid = ;
+                        $.ajax({
+				        url: '/users/' + group.members[i],
+				        type: "GET",
+				        dataType: "json",
+				        contentType: "application/json; charset=UTF-8",
+				        success: function(result){
+                            members[i] = result;
+                        },
+				        statusCode:{
+				        	403: function(res){
+								alert("User does not exist.");
+							}
+				        }
+					});
+                    }*/
+                    add_group_modal_to_page(modal, poll, group, members);
+				},
+				statusCode:{
+				    403: function(res){
+                        alert("The poll does not exist.");
+				    }
+                }
+            });
+        },
+        statusCode:{
+            403: function(res){
+                alert("The group does not exist.");
+            }
+        }
+    });
+});
 
 var get_applications = function(uid){
 
@@ -217,6 +281,7 @@ var add_application_to_page = function(poll, status, uid){
 		var span = document.createElement('span');
 		span.className = "badge";
 		span.innerHTML = "Closed";
+        //TO DO: Michael change the onclick function
 		a.setAttribute("onclick", "this.parentNode.parentNode.removeChild(this.parentNode)");
 		a.appendChild(span);
 		li.appendChild(a);
@@ -307,6 +372,78 @@ $('#orderModal').on('show.bs.modal', function(event) {
 	});
 });
 
+//TO DO: add creator info
+var add_group_modal_to_page = function(modal, poll, group, members) {
+    console.log(members);
+    modal.find('.modal-title').text(poll.title);
+    modal.find('.group-host').text('Host: ' + poll.creator);
+	modal.find('.group-description').html(poll.description);
+    modal.find('.slots').text((group.members.length + 1) + '/' + poll.size);
+    
+    modal.find('#member-wrapper').html('');
+    
+    var div = document.createElement('div');
+    div.className = "panel-group";
+    div.id = "accordion";
+    div.setAttribute("role", "tablist");
+    div.setAttribute("aria-multiselectable", "true");
+    
+    for (var i = 0; i < members.length; i++) {
+        var div2 = document.createElement('div');
+        div2.className = "panel panel-default";
+        
+        var div3 = document.createElement('div');
+        div3.className = "panel-heading";
+        div3.id = "member" + i;
+        div3.setAttribute("role", "tab");
+        
+        var h4 = document.createElement('h4');
+        h4.className = "panel-title";
+        
+        var a = document.createElement('a');
+        a.setAttribute("role", "button");
+        a.setAttribute("data-toggle", "collapse");
+        a.setAttribute("data-parent", "#accordion");
+        a.href = "#collapse" + i;
+        a.setAttribute("aria-expanded", "true");
+        a.setAttribute("aria-controls", "collapse" + i);
+        
+        var div4 = document.createElement('div');
+        div4.id = "collapse" + i;
+        div4.className = "panel-collapse collapse in";
+        div4.setAttribute("role", "tabpanel");
+        div4.setAttribute("aria-labelledby", "member" + i);
+        
+        var div5 = document.createElement('div');
+        div5.className = "panel-body";
+        
+        div.appendChild(div2);
+        div2.appendChild(div3);
+        div3.appendChild(h4);
+        div3.appendChild(a);
+        div2.appendChild(div4);
+        div4.appendChild(div5);
+        
+        $.ajax({
+            url: '/users/' + members[i],
+	        type: "GET",
+            dataType: "json",
+	        contentType: "application/json; charset=UTF-8",
+            success: function(result){
+                a.innerHTML = result.name;
+                div5.innerHTML = "Email: " + result.email + "</br>Phone number: " + result.phone;
+            },
+            statusCode:{
+                403: function(res){
+                    alert("User does not exist.");
+                }
+            }
+        });
+    }
+    
+    document.getElementById('member-wrapper').appendChild(div);
+}
+
 var add_modal_to_page = function(modal, poll, group, username, uid){
 	// first find the applications corresponding to the uid
 	var app = {}
@@ -325,6 +462,8 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 	modal.find('.slots').text((group.members.length + 1) + '/' + poll.size);
 	modal.find('.host').text('Creator: '+ username);
 	modal.find('.description').html(poll.description);
+    
+    modal.find('#questions-wrapper').hmtl('');
 
 	var status = app.status;
 	// status is waiting
@@ -470,7 +609,7 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 	    			wrapper.appendChild(li);
 	    		}
 	    		
-	    		// add memeber to group
+	    		// add member to group
 	    		$.ajax({
 			        url: '/groups/' + poll._id + "/member",
 			        type: "POST",
@@ -485,27 +624,6 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 			        	},
 			        	403: function(res){
 							console.log("error in adding user to group");
-						}
-			        }
-				});
-
-	    		// change status to accepted
-	    		$.ajax({
-			        url: '/applications',
-			        type: "PUT",
-			        dataType: "json",
-			        contentType: "application/json; charset=UTF-8",
-			        data: JSON.stringify({
-			        	uid: uid,
-			        	pid: poll._id,
-			        	status: 2
-			        }),
-			        statusCode:{
-			        	200: function(res){
-			        		console.log("updated status of application");
-			        	},
-			        	403: function(res){
-							console.log("error in updating status of applicaiton");
 						}
 			        }
 				});
