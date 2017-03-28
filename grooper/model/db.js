@@ -3,15 +3,15 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema(
   {
-    _id: 
+    _id:
       { type: Number, required: true, unique: true },
     name:
 	  { type: String, requried: true },
-    email: 
+    email:
 	  { type: String, required: true },
-    phone: 
-	  { type: Number, required: true },
-    pw: 
+    phone:
+	  { type: String, required: true },
+    pw:
 	  { type: String, required: true },
     course_history:
       [ { course: { type: String, required: true, unique: true },
@@ -31,14 +31,14 @@ var PollSchema = new Schema (
 	size: { type: Number, required: true },
 	date: { type: Date, required: true },
 	course: { type: String, required: true },
-	questions: [{ 
+	questions: [{
 	  // id helpful to have for same question but different type/options
-	  id: { type: Number, required: true }, 
+	  id: { type: Number, required: true },
 	  // 0: open, 1: single-answer MC, 2: multiple-answers MC
-	  q_type: { type: Number, required: true }, 
+	  q_type: { type: Number, required: true },
 	  question: { type: String, required: true },
 	  options: [{
-	    value: { type: String, required: true }, 
+	    value: { type: String, required: true },
 		correct: Boolean
 	  }]
 	}]
@@ -57,7 +57,7 @@ var ApplicationSchema = new Schema (
 	date: { type: Date, required: true },
 	//answer is an array because it could have multiple answers
 	answers: [{
-	  question: { type: Number, required: true }, 
+	  question: { type: Number, required: true },
 	  value: { type: String, required: true }
 	}]
   },

@@ -52,15 +52,15 @@
           <div class="row">
             <div class="col-md-4">
               <h3>Name<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
-			  <span class="content" id="Name">Bill Gates</span>
+			  <span class="content" id="name"></span>
             </div>
             <div class="col-md-4">
               <h3>Email<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
-			  <span class="content" id="Email">bill.gates@mail.utoronto.ca</span>
+			  <span class="content" id="email"></span>
             </div>
             <div class="col-md-4">
               <h3>Phone number<span class="btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#editModal" aria-hidden="true"></span></h3>
-			  <span class="content" id="Phone number">647-123-4567</span>
+			  <span class="content" id="phone"></span>
             </div>
 		    <button class="btn" onclick="prompt('Enter your new password');">Change password</button>
           </div>
@@ -125,7 +125,6 @@
           <div class="modal-body text-center">
 			<form id="manageProfile">
 				<input type="text" class="required" id="newContent" autofocus required>
-				<!-- Save button should save data instead of dismissing the modal -->
 				<button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
 				<button class="edit btn btn-primary" type="submit">Save Changes</button>
 			</form>

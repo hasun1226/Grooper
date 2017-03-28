@@ -41,6 +41,10 @@ app.get('/dashboard', function(req, res) {
   res.render('dashboard');
 });
 
+app.get('/profile', function(req, res) {
+  res.render('profile');
+});
+
 // Create user
 app.post('/users', function (req, res) {
   // Validation
@@ -129,15 +133,16 @@ app.put('/users/:uid', function(req, res) {
   if (req.body.email)
     updateJSON.email = req.body.email;
   if (req.body.phone)
-    updateJSON = req.body.phone;
+    updateJSON.phone = req.body.phone;
   if (req.body.pw)
-    updateJSON = req.body.pw;
+    updateJSON.pw = req.body.pw;
 
   db.collection('users').updateOne({
     _id: parseInt(req.params.uid)
   }, {
     $set: updateJSON
   }, function(err, result) {
+    if (err) throw err;
     if (result.matchedCount == 1) {
       res.sendStatus(200);
     } else {
@@ -187,7 +192,7 @@ app.delete('/users/:uid/courses', function(req, res) {
     // User does not exist
     if (docs.length == 0)
       return res.sendStatus(403);
-  
+
     db.collection('users').updateOne({
       _id: parseInt(req.params.uid),
       "course_history.course": {$in: [req.body.course]}
@@ -228,8 +233,8 @@ app.get('/search', function(req, res) {
   req.query.course = req.query.course.toUpperCase();
   db.collection('polls').find(req.query).toArray(function(err, docs) {
     // Sort by date: the first item is the most recently created/updated
-    docs.sort(function(a, b) { 
-      return a.date.getTime() < b.date.getTime(); 
+    docs.sort(function(a, b) {
+      return a.date.getTime() < b.date.getTime();
     });
     return res.json(docs);
   });
@@ -278,13 +283,13 @@ app.get('/polls', function(req, res) {
   }).toArray(function(err, docs) {
     if (docs.length == 0)
       return res.sendStatus(403);
-  
+
     db.collection('polls').find({
       creator: parseInt(req.query.uid)
     }).toArray(function(err, docs) {
       // Sort by date: the first item is the most recently created/updated
-      docs.sort(function(a, b) { 
-        return a.date.getTime() < b.date.getTime(); 
+      docs.sort(function(a, b) {
+        return a.date.getTime() < b.date.getTime();
       });
   	return res.json(docs);
     });
@@ -305,8 +310,8 @@ app.get('/polls/:pid', function(req, res) {
       var target = {};
       var poll = docs[0];
       // Sort by date: the first item is the most recently created/updated
-      result.sort(function(a, b) { 
-        return a.date.getTime() < b.date.getTime(); 
+      result.sort(function(a, b) {
+        return a.date.getTime() < b.date.getTime();
       });
 
       for(var key in poll) target[key] = poll[key];
@@ -404,12 +409,12 @@ app.get('/applications/:uid', function(req, res){
     if (docs.length == 0) {
       return res.sendStatus(403);
     } else {
-      db.collection('applications').find({	
+      db.collection('applications').find({
         uid: parseInt(req.params.uid)
       }).toArray(function(err, docs) {
         // Sort by date: the first item is the most recently created/updated
-        docs.sort(function(a, b) { 
-          return a.date.getTime() < b.date.getTime(); 
+        docs.sort(function(a, b) {
+          return a.date.getTime() < b.date.getTime();
         });
 	    return res.json(docs);
       });
@@ -470,7 +475,7 @@ app.post('/groups', function(req, res) {
     // Creator is not given
     return res.sendStatus(400);
   }
-  
+
   db.collection('polls').find({
     _id: req.body.pid
   }).toArray(function(err, docs) {
@@ -496,7 +501,7 @@ app.post('/groups', function(req, res) {
           date: new Date()
         }, function(fail, success) {
           return res.sendStatus(200);
-        });			
+        });
       });
     });
   });
@@ -505,7 +510,7 @@ app.post('/groups', function(req, res) {
 // Get all the groups for a user
 app.get('/groups', function(req, res) {
   var uid = parseInt(req.query.uid);
-  
+
   db.collection('users').find({
     _id: uid
   }).toArray(function(err, docs) {
@@ -516,8 +521,8 @@ app.get('/groups', function(req, res) {
       $or: [ { members: { $in: [ uid ] } }, { owner: { $in: [ uid ] } } ]
     }).toArray(function(error, result) {
       // Sort by date: the first item is the most recently created/updated
-      result.sort(function(a, b) { 
-        return a.date.getTime() < b.date.getTime(); 
+      result.sort(function(a, b) {
+        return a.date.getTime() < b.date.getTime();
       });
       var groups = [];
   	  for (var i = 0; i < result.length; i++) {
@@ -561,7 +566,7 @@ app.post('/groups/:pid/member', function(req, res) {
         $push: {members: req.body.uid}
       }, function(err, result){
         if(result.modifiedCount == 1){
-          
+
           //check if the group is full
           db.collection('polls').find({
               _id: result.pid
@@ -584,7 +589,7 @@ app.post('/groups/:pid/member', function(req, res) {
                   });
               }
               })
-              
+
           });
           res.sendStatus(200);
         } else{
@@ -599,7 +604,7 @@ app.post('/groups/:pid/member', function(req, res) {
 app.delete('/groups/:pid/member', function(req, res) {
   if (!req.body.uid)
     return res.sendStatus(400);
-  
+
   db.collection('groups').updateOne({
     pid: parseInt(req.params.pid),
     members: {$in: [req.body.uid]}
