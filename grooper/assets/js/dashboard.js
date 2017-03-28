@@ -281,8 +281,9 @@ var add_application_to_page = function(poll, status, uid){
 		var span = document.createElement('span');
 		span.className = "badge";
 		span.innerHTML = "Closed";
-        //TO DO: Michael change the onclick function
-		a.setAttribute("onclick", "this.parentNode.parentNode.removeChild(this.parentNode)");
+		a.setAttribute("onclick", "delete_this_application(this.id)");
+		a.id = poll._id;
+		a.setAttribute('data-uid', uid);
 		a.appendChild(span);
 		li.appendChild(a);
 		wrapper.appendChild(li);
@@ -463,7 +464,7 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 	modal.find('.host').text('Creator: '+ username);
 	modal.find('.description').html(poll.description);
     
-    modal.find('#questions-wrapper').hmtl('');
+    modal.find('#questions-wrapper').html('');
 
 	var status = app.status;
 	// status is waiting
@@ -656,6 +657,35 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 				});
 			}
 		})
-	}
-	
+	}	
+}
+
+// delete application if the poll is already closed
+var delete_this_application = function(id){
+	var a = document.getElementById(id);
+	var uid = a.getAttribute('data-uid');
+
+	console.log(a.id);
+	console.log(uid);
+
+	$.ajax({
+        url: '/applications',
+        type: "DELETE",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+        	pid: parseInt(a.id),
+        	uid: parseInt(uid)
+        }),
+        statusCode:{
+        	200: function(res){
+        		console.log("deleted application successfully");
+        	},
+        	403: function(res){
+				console.log("Error in deleting application");
+			}
+        }
+	});
+
+	a.parentNode.parentNode.removeChild(a.parentNode);
 }
