@@ -3,6 +3,9 @@ var bodyParser = require('body-parser');
 var models = require('./model/db'); //access each model by models
 var autoIncrement = require("mongodb-autoincrement");
 var app = express();
+var morgan = require('morgan');
+var passport = require('passport');
+var jwt = require('jwt-simple');
 
 // Set views path, template engine and default layout
 app.use(express.static(__dirname + '/assets'));
@@ -15,6 +18,9 @@ app.set('view engine', 'html');
 app.use( bodyParser.json() );
 // Support URL-encoded bodies, req.query
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Logging to console
+app.use(morgan('dev'));
 
 //mongo
 var MongoClient = require('mongodb').MongoClient;
@@ -61,7 +67,7 @@ app.post('/users', function (req, res) {
     }
     // Insert into database
     autoIncrement.getNextSequence(db, 'users', function (err, autoIndex) {
-      db.collection('users').insertOne({
+      db.collection('users').save({
         _id: autoIndex,
         name: req.body.name,
         phone: req.body.phone,
@@ -74,6 +80,31 @@ app.post('/users', function (req, res) {
 		});
 	  });
     });
+  });
+});
+
+app.post('/authenticate', function(req, res) {
+  db.collection('users').findOne({
+    _id: parseInt(req.body.uid)
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      res.send({success: false, msg: 'Authentication failed. User not found.'});
+    } else {
+      // check if password matches
+      console.log(user);
+      user.comparePassword(req.body.password, function (err, isMatch) {
+        if (isMatch && !err) {
+          // if user is found and password is right create a token
+          var token = jwt.encode(user, config.secret);
+          // return the information including token as JSON
+          res.json({success: true, token: 'JWT ' + token});
+        } else {
+          res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+        }
+      });
+    }
   });
 });
 
