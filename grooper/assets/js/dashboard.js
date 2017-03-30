@@ -55,7 +55,6 @@ var add_poll_to_page = function(poll){
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         success: function(data){
-        	console.log(data.members.length);
         	closed = ((data.members.length + 1) === poll.size); // +1 b/c of owner
 
         	var wrapper = document.getElementById("poll-wrapper");
@@ -95,7 +94,6 @@ var get_groups = function(uid){
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         success: function(data){
-        	console.log(data);
         	if (!data.groups.length){
         		var wrapper = document.getElementById("group-wrapper");
         		var li = document.createElement('li');
@@ -276,7 +274,6 @@ var add_application_to_page = function(poll, status, uid){
 	// 3 cases depending on status
 
 	// closed -> next click = delete
-	// TODO check if it works if you are the last person added to the group
 	if (status === 3){
 		var span = document.createElement('span');
 		span.className = "badge";
@@ -311,9 +308,6 @@ var add_application_to_page = function(poll, status, uid){
 		li.appendChild(a);
 		wrapper.appendChild(li);
 	}
-	else {
-		console.log("Poll " + poll._id + " already accepted you!");
-	}
 }
 
 $('#orderModal').on('show.bs.modal', function(event) {
@@ -330,7 +324,6 @@ $('#orderModal').on('show.bs.modal', function(event) {
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         success: function(poll){
-        	console.log("pid " + pid);
         	// then get the group
         	$.ajax({
 		        url: '/groups/' + pid,
@@ -338,7 +331,6 @@ $('#orderModal').on('show.bs.modal', function(event) {
 		        dataType: "json",
 		        contentType: "application/json; charset=UTF-8",
 		        success: function(group){
-		        	console.log("creator " + poll.creator);
 		        	// then get the creator's username
 		        	$.ajax({
 				        url: '/users/' + poll.creator,
@@ -471,20 +463,24 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 	if (status == 0) {
 		modal.find('.app-form').html('Application Form');
 		
-		// TODO check what if they didn't answer all the question/ no. of question doesnt match with no. of answers
 		for (var i = 0; i < poll.questions.length; i++){
 			var question = poll.questions[i];
 			var answer = {};
-			for (var j = 0; j < app.answers.length; j++){
-				if (question.id == app.answers[j].question){
-					answer = app.answers[j];
-				}
-			}
-
+			
 			// open question
 			if (question.q_type == 0){
+				// find corresponding answer for the question
+				for (var j = 0; j < app.answers.length; j++){
+					if (question.id == app.answers[j].question){
+						answer = app.answers[j];
+						break; // can break because only 1 answer
+					}
+				}
+
 				var div = document.createElement('div');
-				div.className = "form-group";
+				div.className = "form-group poll-question";
+				div.id = question.id;
+				div.setAttribute('data-qtype', question.q_type);
 				var label = document.createElement('label');
 				label.setAttribute('for', "textarea-" + question.id);
 				label.innerHTML = question.question;
@@ -493,7 +489,7 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 				textarea.id = "textarea-" + question.id;
 				textarea.setAttribute('rows', 3);
 				if (!answer){
-					textarea.value = "No answer so far!";
+					textarea.placeholder = "No answer so far!";
 				}
 				else {
 					textarea.value = answer.value;
@@ -505,8 +501,18 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 			}
 			// single-answer MC
 			else if (question.q_type == 1){
+				// find corresponding answer for the question
+				for (var j = 0; j < app.answers.length; j++){
+					if (question.id == app.answers[j].question){
+						answer = app.answers[j];
+						break; // can break because one 1 answer
+					}
+				}
+
 				var div = document.createElement('div');
-				div.className = "form-group";
+				div.className = "form-group poll-question";
+				div.id = question.id;
+				div.setAttribute('data-qtype', question.q_type);
 				var div2 = document.createElement('div');
 				div2.className = "row";
 				var label = document.createElement('label');
@@ -535,7 +541,9 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 			// multiple answer MC
 			else if (question.q_type == 2){
 				var div = document.createElement('div');
-				div.className = "form-group";
+				div.className = "form-group poll-question";
+				div.id = question.id;
+				div.setAttribute('data-qtype', question.q_type);
 				var div2 = document.createElement('div');
 				div2.className = "row";
 				var label = document.createElement('label');
@@ -550,9 +558,12 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 					input.type = "checkbox";
 					input.name = "inlineCheckbox";
 					input.id = "inlineCheckbox" + q;
-					// TODO not too sure how to do this yet
-					if (answer && question.options[q].value == answer.value){
-						input.checked = true;
+					// loop through answers to find corresponding checked checkbox
+					for (var j = 0; j < app.answers.length; j++){
+						if ((question.id == app.answers[j].question) 
+						&& (question.options[q].value == app.answers[j].value)){
+							input.checked = true;
+						}
 					}
 					label_op.appendChild(input);
 					var p = document.createElement('p');
@@ -565,26 +576,72 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 		}
 		
 		// button that edits the responses
-		// TODO send PUT request
 		var btn = $('<button type="button" class="edit btn btn-success" data-dismiss="modal">Edit</button>')
 		btn.click(function () {
-			// text_ans = modal.find('#textarea_answer').val()
-			// radio_checked = $('input[name=inlineRadioOptions]:checked').val()
-			// checkbox_checked = []
-			// $('input[name=inlineCheckbox]:checked').each(function () {
-			// 	checkbox_checked.push($(this).val());
-			// })
+			var updated_ans = []; //answers has [{question (id), value}]
+			var q_list = modal.find('.poll-question');
+			var new_ans_added = false;
+			for (var d = 0; d < q_list.length; d++){
+				var ques = q_list[d];
+				qid = ques.id;
+				q_type = ques.getAttribute('data-qtype');
+				
+				// open answers
+				if (q_type == 0){
+					var text_ans = modal.find('#textarea-' + qid).val();
+					var new_ans = {
+						question: parseInt(qid),
+						value: text_ans
+					};
+					//console.log(new_ans);
+					new_ans_added |= !check_answers_in_list(new_ans, app.answers);
+					updated_ans.push(new_ans); // push anyways
+				}
+				// MC questions
+				else if (q_type == 1 || q_type == 2){
+					var options = $(ques).find('label>input');
+					for (var op = 0; op < options.length; op++){
+						var option = options[op];
+						if (option.checked){
+							var value = $(option).next().html();
+							var new_ans = {
+								question: parseInt(qid),
+								value: value
+							};
+							new_ans_added |= !check_answers_in_list(new_ans, app.answers);
+							updated_ans.push(new_ans); // push anyways
+						}
+					}
+				}
+			}
+			if (!new_ans_added){
+				alert("Please at least update 1 answers field!");
+			}
+			else {
+				// send put request to update answers
+				$.ajax({
+			        url: '/applications',
+			        type: "PUT",
+			        dataType: "json",
+			        contentType: "application/json; charset=UTF-8",
+			        data: JSON.stringify({
+			        	uid: uid,
+			        	pid: poll._id,
+			        	answers: updated_ans
+			        }),
+			        statusCode:{
+			        	200: function(res){
+			        		alert("updated application successfully!");
+			        	},
+			        	403: function(res){
+							alert("error in updating application");
+						}
+			        }
+				});
+			}
 		})
 		
-		modal.find('#questions-wrapper').append(btn);
-		
-		// // Default values
-		// modal.find('#textarea_answer').val(text_ans)
-		// modal.find('#inlineRadio' + radio_checked).prop('checked', true)
-		// $.each(checkbox_checked, function(index, value) {
-		// 	modal.find('#inlineCheckbox' + value).prop('checked', true)
-		// })
-		
+		modal.find('#questions-wrapper').append(btn);		
 	} 
 	// status is invited
 	else if (status == 1) {
@@ -658,6 +715,19 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 			}
 		})
 	}	
+}
+
+// check if the new answers is "new"
+var check_answers_in_list = function(updated_ans, original_ans){
+	//console.log(updated_ans);
+	for (var i = 0; i < original_ans.length; i++){
+		//console.log(original_ans[i]);
+		if ((updated_ans.question == original_ans[i].question)
+		 && (updated_ans.value == original_ans[i].value)){
+			return true;
+		}
+	}
+	return false;
 }
 
 // delete application if the poll is already closed
