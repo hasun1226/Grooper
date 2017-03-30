@@ -55,8 +55,7 @@ var add_poll_to_page = function(poll){
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         success: function(data){
-        	closed = ((data.members.length + 1) === poll.size); // +1 b/c of owner
-
+        	closed = (data.members.length +1 === poll.size); // +1 b/c of owner
         	var wrapper = document.getElementById("poll-wrapper");
     		var li = document.createElement('li');
     		var a = document.createElement('a');
@@ -69,9 +68,22 @@ var add_poll_to_page = function(poll){
     			span.innerHTML = closed;
     		}
     		else{
-    			a.href = "managepoll.html";
-    			span.innerHTML = "New !";
-    			span.className = "badge badge-new"
+                a.href = "managepoll.html";
+                $.ajax({
+                    url: '/applications/' + poll._id + '/number',
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=UTF-8",
+                    success: function(data){
+                        span.innerHTML = data.applicants + " applicants";
+                    },
+                    statusCode:{
+                        404: function(data){
+                            span.innerHTML = "No applicants";
+                        }
+                    }
+                });
+    			span.className = "badge"
     		}
     		a.appendChild(span);
     		li.appendChild(a);
@@ -144,6 +156,22 @@ var add_group_to_page = function(poll) {
     a.className = 'list-group-item';
     a.innerHTML = poll.course + '-' + poll.title;
     a.href = "#";
+    var span = document.createElement('span');
+    span.className = "badge";
+    
+    $.ajax({
+        url: '/groups/' + poll._id,
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function(data){
+            closed = (data.members.length +1 === poll.size); // +1 b/c of owner
+            if(closed){
+                span.innerHTML = "Complete";
+                a.appendChild(span);
+            }
+        }
+    });
     li.appendChild(a);
     wrapper.appendChild(li);
     
