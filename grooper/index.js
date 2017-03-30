@@ -422,6 +422,16 @@ app.get('/applications/:uid', function(req, res){
   });
 });
 
+//Get number of applications for a poll
+app.get('/applications/:pid/number', function(req, res) {
+   db.collection('applications').find({
+        pid: parseInt(req.params.pid)
+    }).toArray(function(err, docs) {
+        applicants = docs.length;
+        return res.json({applicants: applicants});
+    }); 
+});
+
 // Update of application
 app.put('/applications', function(req, res){
   //validation
