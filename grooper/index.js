@@ -504,32 +504,33 @@ app.delete('/applications', function(req, res){
 
 // Create a new group
 app.post('/groups', function(req, res) {
+	console.log(!req.body.pid);
   if(!req.body.creator || !req.body.pid){
     // Creator is not given
     return res.sendStatus(400);
   }
 
   db.collection('polls').find({
-    _id: req.body.pid
+    _id: parseInt(req.body.pid)
   }).toArray(function(err, docs) {
     // Poll does not exist
     if (docs.length == 0)
       return res.sendStatus(400);
     db.collection('users').find({
-      _id: req.body.creator
+      _id: parseInt(req.body.creator)
     }).toArray(function(err, result) {
       // Creator does not exist or is not the creator of the poll
       if (result.length == 0 || result[0]._id != docs[0].creator)
         return res.sendStatus(400);
       db.collection('groups').find({
-        pid: req.body.pid
+        pid: parseInt(req.body.pid)
       }).toArray(function (err, groups) {
         // Group with pid already exists
         if (groups.length > 0)
           return res.sendStatus(403);
         db.collection('groups').insertOne({
-          pid: req.body.pid,
-          owner: req.body.creator,
+          pid: parseInt(req.body.pid),
+          owner: parseInt(req.body.creator),
           members: [],
           date: new Date()
         }, function(fail, success) {

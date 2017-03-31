@@ -47,6 +47,49 @@ $('#orderModal').on('show.bs.modal', function(event) {
 	var getid = $(row).data('id')
 	
 	var modal = $(this)
+    // Retrieve poll info
+    $.ajax({
+      url: '/polls/' + getid,
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      success: function(response) {
+		  alert(JSON.stringify(response));
+        modal.find('.modal-title').text(response.title);
+        modal.find('.group-title').text(response.title);
+        modal.find('.slots').text($(row).find('.slots-open').text());
+        modal.find('.host').text('Host: ' + $(row).find('.group-host').text());
+        modal.find('.description').text(response.description);
+        // If the creator is different from the user
+        modal.find('.app-form').html('Application Form');
+
+		var questions = response.questions;
+		for (var i=0; i<questions.length; i++) {
+		  var q = questions[i];
+		  var form_div = $('<div class="form-group"></div>');
+		  if (q.q_type == 0) {
+		    form_div.append('<label for="textarea_answer">'+ q.question +'</label><textarea class="form-control" id='+ q.id +' rows="3" required></textarea>');
+		  } else if (q.q_type == 1) {
+		    form_div.append('<div class="row"><label class="col-xs-12">'+ q.question +'</label></div>');
+		    var q.options;
+		    for (var j=0; j<q.options.length; j++) {
+		      
+		    }
+		  } else {
+		    
+		  }
+		}
+		
+		var btn;
+		// button that edits the responses
+		btn = $('<button type="submit" class="edit btn btn-success">Edit</button>');
+		// button that submits the responses
+		btn = $('<button type="submit" class="submit btn btn-success" data-dismiss="modal">Submit</button>');
+		// button that edits the polls
+		btn = $('<a href="managepoll"><button type="button" class="btn btn-success">Edit</button></a>');
+      }
+    });
+	
+	
 	if (getid == 4) {
 		modal.find('.modal-title').text('Apple Project')
 		modal.find('.group-title').text('Apple Project')
@@ -277,19 +320,19 @@ $('#application_form').on('submit', function(e) {
 	  var rad_opt = $(this).find(".radio-inline");
 	  var cb_opt = $(this).find(".checkbox-inline");
 	  if ($(this).find("textarea").length > 0){
-		  q_data.push("{id:" + q_id + ", q_type:" + 0 + ", question:" + question  + "}");
+		  q_data.push('{id:' + q_id + ', q_type:' + 0 + ', question:"' + question  + '"}');
 	  } else if (rad_opt.length > 0) {
 		  var options = [];
 		  rad_opt.each(function() {
-			options.push("{value:" + $(this).text().trim('') + ", correct:" + $(this).children(":first").prop("checked") + "}"); 
+			options.push('{value:"' + $(this).text().trim('') + '", correct:' + $(this).children(":first").prop("checked") + '}'); 
 		  });
-		  q_data.push("{id:" + q_id + ", q_type:" + 1 + ", question:" + question  + ", options:[" + options + "]}");
+		  q_data.push('{id:' + q_id + ', q_type:' + 1 + ', question:"' + question  + '", options:[' + options + ']}');
 	  } else if(cb_opt.length > 0) {
 		  var options = [];
 		  cb_opt.each(function() {
-			options.push("{value:" + $(this).text().trim('') + ", correct:" + $(this).children(":first").prop("checked") + "}"); 
+			options.push('{value:"' + $(this).text().trim('') + '", correct:' + $(this).children(":first").prop("checked") + '}'); 
 		  });
-		  q_data.push("{id:" + q_id + ", q_type:" + 2 + ", question:" + question  + ", options:[" + options + "]}");
+		  q_data.push('{id:' + q_id + ', q_type:' + 2 + ', question:"' + question  + '", options:[' + options + ']}');
 	  }
     
   });
@@ -304,13 +347,12 @@ $('#application_form').on('submit', function(e) {
       "creator": 2,  // Need to change the creator with the uid
       "title": inputProjectTitle,
       "description": inputProjectDesc,
-      "size": group_size,
+      "size": parseInt(group_size),
       "date": date,
       "course": inputCourse,
       "questions": q_data
     }),
     success: function(response) {
-		
       // POST group
 	  $.ajax({
 	    url: "/groups",
@@ -322,7 +364,7 @@ $('#application_form').on('submit', function(e) {
 	     "creator": 2  // Need to change the creator with the uid
 	    })
 	  });
+	  window.location.reload();
     }
   });
-  window.location.reload();
 });
