@@ -8,6 +8,10 @@ html, body {
   padding: 0;
 }
 
+.found {
+	display: none;
+}
+
 .course {
 	display: inline-block;
 }

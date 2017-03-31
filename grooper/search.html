@@ -26,7 +26,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="profile.html">Profile</a></li>
+            <li><a href="profile">Profile</a></li>
             <li><a href="dashboard">Dashboard</a></li>
 			<li><a href="/">Sign out</a></li>
           </ul>
@@ -44,9 +44,10 @@
       </div><!-- /.container-fluid -->
     </nav>
 	
+	<div class="found"><%= found %></div>
     <div class="panel panel-default panel-custom">
       <div class="panel-heading text-center">
-        <h2 class="course"><%= course %></h2>
+        <h2 class="course"></h2>
 	    <button type="button" class="btn btn-warning right-aligned" data-toggle="modal" data-target="#createNewPoll">
 	      <i class="glyphicon glyphicon-plus"></i>
         </button>
@@ -61,32 +62,7 @@
 		    <th class="col-md-3">Slots</th>
 	      </tr>
 	    </thead>
-	    <tbody id="polls">
-		  <tr data-toggle="modal" data-id="4" data-target="#orderModal">
-		    <td class="group-host col-md-3">Steve Jobs</td>
-		    <td class="group-name col-md-6">Apple Project</td>
-			<td class="col-md-3">Jan. 18</td>
-		    <td class="slots-open col-md-3">1/4</td>
-		  </tr>
-		  <tr data-toggle="modal" data-id="3" data-target="#orderModal">
-		    <td class="group-host col-md-3">Bill Gates</td>
-		    <td class="group-name col-md-6">Looking for a hard worker</td>
-			<td class="col-md-3">Jan. 17</td>
-		    <td class="slots-open col-md-3">1/4</td>
-		  </tr>
-		  <tr data-toggle="modal" data-id="2" data-target="#orderModal">
-		    <td class="group-host col-md-3">Mark Zuckerberg</td>
-		    <td class="group-name col-md-6">Social Media Application</td>
-			<td class="col-md-3">Jan. 17</td>
-		    <td class="slots-open col-md-3">1/4</td>
-		  </tr>
-		  <tr data-toggle="modal" data-id="1" data-target="#orderModal">
-		    <td class="group-host col-md-3">Amir Chinaei</td>
-		    <td class="group-name col-md-6">TA Application</td>
-			<td class="col-md-3">Jan. 16</td>
-		    <td class="slots-open col-md-3">2/4</td>
-		  </tr>
-	    </tbody>
+	    <tbody id="polls"></tbody>
       </table>
     </div>
 	
@@ -103,7 +79,7 @@
             <form id ="application_form">
               <div class="form-group">
                 <label for="inputCourse">Course code</label>
-                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" value=<%= course %> required>
+                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" required>
               </div>
               <div class="form-group">
                 <label for="inputProjectTitle">Project title</label>

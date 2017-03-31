@@ -1,8 +1,46 @@
-var text_ans = 'bunch'
-var radio_checked = 5
-var checkbox_checked = [1,2,3,4,5]
-var questions_added
-/* Above variables are just temporary variables in order to show how the front end works */
+$(document).ready(function() {
+  course = location.search.substr(8).toUpperCase();
+  
+  $('.course').text(course);
+  if ($('.found').text() == "true"){
+    $.ajax({
+      url: '/polls?course=' + course,
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      success: function(response){
+        let parent = $('#polls');
+        for (let i = 0; i < response.length; i++) {
+          let tmp = $('<tr data-toggle="modal" data-id=' + response[i]._id + ' data-target="#orderModal">');
+  
+          // Get creator's name
+          $.ajax({
+            url: '/users/' + response[i].creator.toString(),
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function(creator) {
+              tmp.append($('<td class="group-host col-md-3">' + creator.name + '</td>'));
+              tmp.append($('<td class="group-name col-md-6">' + response[i].title + '</td>'));
+              tmp.append($('<td class="col-md-3">' + response[i].date.substr(0, 10) + '</td>'));
+            
+              // Get group size
+              $.ajax({
+                url: '/groups/' + response[i]._id.toString(),
+                dataType: "json",
+                contentType: "application/json; charset=UTF-8",
+                success: function(group) {
+                  tmp.append($('<td class="slots-open col-md-3">' + (group.members.length+1) + '/' + response[i].size + '</td>'));
+                  parent.append(tmp);
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  } else {
+    $('.panel').html('<h2 class="course" style="margin-left: 10px;">This course is not offered</h2>');
+  }
+});
 
 $('#orderModal').on('show.bs.modal', function(event) {
 	var row = $(event.relatedTarget) // Row that is clicked
@@ -125,7 +163,7 @@ $('.questions').on('submit', function(e) {
 	});
 });
 
-qNo = 1;
+qNo = 0;
 
 function createQuestion() {	
 	// Generates questions
@@ -152,13 +190,17 @@ function createQuestion() {
 		form_div.append(division);
 	
 		var type = document.getElementById('question_type');
-		var instruction = document.createTextNode("Select the options that you wish to make as answer");
 		if (type.options[type.selectedIndex].value == 'text') {
 			var question = document.createElement('textarea');
 			question.rows = '3';
 			question.className = "form-control";
 			form_div.append(question);
 		} else if (type.options[type.selectedIndex].value == 'MC') {
+			
+            var instruction = document.createElement('p');
+            instruction.textContent = "Select the option that you wish to make as answer";
+            form_div.append(instruction);
+			
 			var options = prompt("Please enter all the values for the answer separated by commas").split(",");
 			options.forEach(function createQuestion(value) {
 				if (value.trim() != '') {
@@ -169,12 +211,16 @@ function createQuestion() {
 					question.type = 'radio';
 					question.setAttribute('name', 'radio' + qNo);
 					radio_inline.prepend(question);
-					form_div.append(instruction);
 					form_div.append(radio_inline);
 				}
 			});
 			
 		} else {
+			
+			var instruction = document.createElement('p');
+            instruction.textContent = "Select the option(s) that you wish to make as answer";
+            form_div.append(instruction);
+			
 			var options = prompt("Please enter all the values for the answer separated by commas").split(",");
 			options.forEach(function createQuestion(value) {
 				if (value.trim() != '') {
@@ -184,8 +230,7 @@ function createQuestion() {
 					var question = document.createElement('INPUT');
 					question.type = 'checkbox';
 					cb_inline.prepend(question);
-					form_div.append(instruction);
-					form_div.append(instruction, cb_inline);
+					form_div.append(cb_inline);
 				}
 			});
 		}
@@ -193,10 +238,10 @@ function createQuestion() {
 		var app_form = document.getElementById('application_form');
 		app_form.insertBefore(form_div, app_form.lastElementChild);	
 	}
-	
 	document.getElementById('inputQuestion').value = '';
 }
 
+// In case the modal is not subimtted but only closed
 $('#createNewPoll').on('hidden.bs.modal', function() {
 	// Default everything in the modal
 	$('.newly_added').remove();
@@ -205,77 +250,79 @@ $('#createNewPoll').on('hidden.bs.modal', function() {
 	$('#inputProjectTitle').val('');
 	$('#inputProjectDesc').val('');
 	document.getElementById('question_type').value = 'text';
-	qNo = 1;
+	qNo = 0;
 });
 
-var monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 
 $('#application_form').on('submit', function(e) {
   e.preventDefault();
-  /* Above command to stay on the same page just to see how front-end works */
-
+  
   var inputProjectTitle = $('#inputProjectTitle').val();
   var inputProjectDesc = $('#inputProjectDesc').val();
-  var inputCourse = $('#inputCourse').val();
+  var inputCourse = $('#inputCourse').val().toUpperCase();
   
   var select_id = document.getElementById("select_id");
   var group_size = select_id.options[select_id.selectedIndex].value;
 	
   var date = new Date();
   
-  // Questions that are newly added can be found with classname "newly_added"
+  // Questions that are newly added"
   $('.newly_added').find('.remove-question').remove();
   var questions = $('.newly_added').clone();
+  
   var q_data = [];
   questions.each(function() {
-    q_data.push("{ id: " + this.id + ", q_type: , question: , options: }");
-  })
+	  var q_id = this.id;
+	  var question = $(this).find('.col-xs-12').text();
+	  var rad_opt = $(this).find(".radio-inline");
+	  var cb_opt = $(this).find(".checkbox-inline");
+	  if ($(this).find("textarea").length > 0){
+		  q_data.push("{id:" + q_id + ", q_type:" + 0 + ", question:" + question  + "}");
+	  } else if (rad_opt.length > 0) {
+		  var options = [];
+		  rad_opt.each(function() {
+			options.push("{value:" + $(this).text().trim('') + ", correct:" + $(this).children(":first").prop("checked") + "}"); 
+		  });
+		  q_data.push("{id:" + q_id + ", q_type:" + 1 + ", question:" + question  + ", options:[" + options + "]}");
+	  } else if(cb_opt.length > 0) {
+		  var options = [];
+		  cb_opt.each(function() {
+			options.push("{value:" + $(this).text().trim('') + ", correct:" + $(this).children(":first").prop("checked") + "}"); 
+		  });
+		  q_data.push("{id:" + q_id + ", q_type:" + 2 + ", question:" + question  + ", options:[" + options + "]}");
+	  }
+    
+  });
   
+  // POST poll
   $.ajax({
     url: "/polls",
     type: "POST",
     dataType: "json",
     contentType: "application/json; charset=utf-8",
     data: JSON.stringify({
-      "creator": 1,
+      "creator": 2,  // Need to change the creator with the uid
       "title": inputProjectTitle,
       "description": inputProjectDesc,
       "size": group_size,
       "date": date,
       "course": inputCourse,
-      "questions": []  // replace [] with q_data
+      "questions": q_data
     }),
     success: function(response) {
-      alert("success!");
+		
+      // POST group
+	  $.ajax({
+	    url: "/groups",
+	    type: "POST",
+	    dataType: "json",
+	    contentType: "application/json; charset=utf-8",
+	    data: JSON.stringify({
+	     "pid": response._id,
+	     "creator": 2  // Need to change the creator with the uid
+	    })
+	  });
     }
   });
-	
-	/* Below are the simulated codes */
-	if (inputCourse != 'CSC309') {
-		$('#createNewPoll').modal('hide');
-		// Default everything in the modal
-		$('#inputCourse').val('CSC309');
-		$('#inputProjectTitle').val('');
-		$('#inputProjectDesc').val('');
-		return;
-	}
-	
-	questions_added = $('.newly_added').clone();
-	
-	var polls = $('#polls');
-	var newItem = $('<tr data-toggle="modal" data-id="' + polls.find('tr').length+1 + '" data-target="#orderModal">');
-	newItem.append('<td class="group-host col-md-3">Bill Gates</td>');
-	newItem.append('<td class="group-name col-md-6">' + inputProjectTitle + '</td>');
-	
-	// Date
-	newItem.append('<td class="col-md-3">' + monthNames[date.getMonth()] + ' ' + date.getDate() + '</td>');
-	
-	newItem.append('<td class="slots-open col-md-3">1/'+ group_size + '</td>');
-	newItem.insertBefore(polls.children(":first"));
-	
-	$('#createNewPoll').modal('hide');
-	// Default everything in the modal
-	$('#inputCourse').val('CSC309');
-	$('#inputProjectTitle').val('');
-	$('#inputProjectDesc').val('');
+  window.location.reload();
 });

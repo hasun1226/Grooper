@@ -1,7 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var models = require('./model/db'); //access each model by models
+var models = require('./model/db'); // Access each model by models
 var autoIncrement = require("mongodb-autoincrement");
+var fs = require('fs');
+var _ = require('underscore');
+
 var app = express();
 
 // Set views path, template engine and default layout
@@ -230,14 +233,20 @@ app.post('/login', function(req, res) {
 
 // Search polls in course
 app.get('/search', function(req, res) {
+
   req.query.course = req.query.course.toUpperCase();
-  db.collection('polls').find(req.query).toArray(function(err, docs) {
-    // Sort by date: the first item is the most recently created/updated
-    docs.sort(function(a, b) {
-      return a.date.getTime() < b.date.getTime();
-    });
-    return res.json(docs);
-  });
+  
+  // Checks if the course is offered in 2017 Winter
+  var contents = fs.readFileSync('resources/courses.json');
+  var courses = JSON.parse(contents);
+  var filtered = _.where(courses, {code: req.query.course + "H1S" , term: "2017 Winter"});
+
+  // Course is offered
+  if (filtered.length > 0) {
+	res.render('search', {found: true});
+  } else {
+    res.render('search', {found: false});
+  }
 });
 
 // Create a poll
@@ -268,32 +277,46 @@ app.post('/polls', function(req, res) {
 	  size: req.body.size,
 	  questions: req.body.questions
     }, function(err, result) {
-      return res.json({
-        _id: result.insertedId
+      db.collection('polls').find({_id: result.insertedId}).toArray(function(err, docs) {
+		  console.log(docs[0]);
+        return res.json(docs[0]);
       });
 	});
   });
 });
 
-// Get polls created by a user
+// Get polls created by a user or for a course
 app.get('/polls', function(req, res) {
-  // Check if the user with uid exists
-  db.collection('users').find({
-    _id: parseInt(req.query.uid)
-  }).toArray(function(err, docs) {
-    if (docs.length == 0)
-      return res.sendStatus(403);
+  if (req.query.uid) {
+    // Check if the user with uid exists
+    db.collection('users').find({
+      _id: parseInt(req.query.uid)
+    }).toArray(function(err, docs) {
+      if (docs.length == 0)
+        return res.sendStatus(403);
 
+      db.collection('polls').find({
+        creator: parseInt(req.query.uid)
+      }).toArray(function(err, docs) {
+        // Sort by date: the first item is the most recently created/updated
+        docs.sort(function(a, b) {
+          return a.date.getTime() < b.date.getTime();
+        });
+    	return res.json(docs);
+      });
+    });
+  } else if (req.query.course) {
+    // Find polls for the course
     db.collection('polls').find({
-      creator: parseInt(req.query.uid)
+      course: req.query.course
     }).toArray(function(err, docs) {
       // Sort by date: the first item is the most recently created/updated
       docs.sort(function(a, b) {
         return a.date.getTime() < b.date.getTime();
       });
-  	return res.json(docs);
+      return res.json(docs);
     });
-  });
+  }
 });
 
 // Get a poll given the pid
