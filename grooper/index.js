@@ -48,6 +48,10 @@ app.get('/profile', function(req, res) {
   res.render('profile');
 });
 
+app.get('/managepoll', function(req, res) {
+  res.render('managepoll');
+});
+
 // Create user
 app.post('/users', function (req, res) {
   // Validation
