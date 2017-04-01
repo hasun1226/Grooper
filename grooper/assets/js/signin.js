@@ -12,7 +12,7 @@ $('.form-signin').on('submit', function(e) {
     success: function(data) {
       // Logged on the browser console
       console.log(JSON.stringify(data));
-      window.location="dashboard?uid=" + data._id;
+      window.location="dashboard?uid=" + data.userID + "&key=" + data.token;
     },
     error: function (jqXHR, exception) {
       if (jqXHR.status === 403)

@@ -14,6 +14,24 @@ app.engine('js', require('ejs').renderFile);
 app.set('views', __dirname);
 app.set('view engine', 'html');
 
+// If a token is found, it will be stored on req.token
+var bearerToken = require('express-bearer-token');
+app.use(bearerToken());
+
+// JSON web token
+var jwt = require('jwt-simple');
+var secret = 'QbSqjf3v1V2sMHyeo27W';
+
+// Function for generating token
+var generateToken = function (userID) {
+  var date = new Date();
+  var payload = {
+    userID: userID,
+    exp: date.setHours(date.getHours() + 24)
+  };
+  return jwt.encode(payload, secret);
+};
+
 // Parses the text as JSON and exposes the resulting object on req.body
 app.use( bodyParser.json() );
 // Support URL-encoded bodies, req.query
@@ -38,6 +56,31 @@ app.get('/', function(req, res) {
 
 app.get('/register', function(req, res) {
   res.render('register');
+});
+
+// Authentication
+app.all('*', function (req, res, next) {
+  if (req.token) {
+	  console.log("token found");
+    var decodedToken = jwt.decode(req.token, secret);
+    if (decodedToken && new Date(decodedToken.exp) > new Date()) {
+      // Check if user exists and is admin
+      db.collection('users').find({
+        _id: decodedToken.userID
+      }).toArray(function(err, docs) {
+        if (docs.length > 0) {
+          req.userID = docs[0]._id;
+          req.email = docs[0].email;
+          req.name = docs[0].name;
+        }
+        next();
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 app.get('/dashboard', function(req, res) {
@@ -231,7 +274,11 @@ app.post('/login', function(req, res) {
       return res.sendStatus(403);
     }
 	// Successfully logged in
-	return res.json( docs[0] );
+	var token = generateToken(docs[0]._id);
+	return res.json({
+      userID: docs[0]._id,
+      token: token
+    });
   });
 });
 
