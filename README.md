@@ -1,20 +1,20 @@
-![logo](grooper/assets/images/logo.png)
+![logo](assets/images/logo.png)
 
 Grooper is a web application that helps students find groups for courses. It uses a “Poll” interface to find the groups and match the teammates. When a user creates a poll, the creator can give a short description of his/her group’s project. To help with the choosing process, the creator can add questions as an “Application form” to the poll which will be asked to the other. Users who are interested in the group after viewing the description will submit their responses to the application form. Then the creator of the poll can choose his/her teammates from the list of applicants. Once all the teammates are confirmed, the group is closed and the poll is removed.
 
 ---
 
 ## What has been done for Phase 3?
-Roughly 85% of the features including posting, displaying, editing, and sorting by time are now virtually working. 10 necessary features, which are of login management and searching mechanisms, are still pending out of the 64 features outlined in [Phase1_updated](Phase1_updated.pdf).
+Roughly 85% of the features including posting, displaying, editing, and sorting by time are now virtually working. 10 necessary features, which are of login management and searching mechanisms, are still pending out of the 64 features outlined in [Phase1_updated](resources/Phase1_updated.pdf).
 
-### [Back-end development](grooper/index.js)
-23 main APIs are completed. Please refer to the [setup instruction](grooper/README.md) to run the back-end.
+### [Back-end development](index.js)
+23 main APIs are completed. Please refer to the [setup instruction](install.md) to run the back-end.
 
-### [API documentation](Grooper_API.pdf)
+### [API documentation](resources/Grooper_API.pdf)
 Shows Method, Endpoint, Description, Input JSON, Output JSON, Failure. APIs with red letters, which are /login and /logout, mean they are not fully complete.
 
-### [test-script](grooper/test_script.sh)
-Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided). After running all the commands, the resulting data will be as [users.json](grooper/model/users.json).
+### [test-script](test_script.sh)
+Describes the behaviors including successful curl commands and when they will fail (failed test cases are not provided, but how you can fail them is provided). After running all the commands, the resulting data will be as [users.json](model/users.json).
 
 ### Notable attributes
  * Divided GET user info into two parts: basic profile and course history
@@ -35,26 +35,26 @@ Describes the behaviors including successful curl commands and when they will fa
 ---
 ## What has been done for Phase 2?
 
-### [Front-end design](grooper)
+### Front-end design
 HTML, CSS and JavaScript files were created to imitate the behaviors of the application on the front-end.
 
 Please note that the below features are simulations of front-end behaviors only using static dummy data. Any back-end processes such as fetching the data from the server or posting the data to the server are not implemented yet. Those items that are strictly front-end will be __bolded__.
 #### Implemented features
 * Account Management
-  * Account creation (See [Register page](grooper/register.html]))
+  * Account creation (See [Register page](register.html))
   * __Form validation (mandatory name, email, phone number and 2 passwords must match the patterns and the passwords must match)__
-* [Profile](grooper/profile.html)
+* [Profile](profile.html)
   * Display all the information about the user
   * Change name/email address/phone number
   * Change password
   * Change course history
   * __Form validation (mandatory values for changing profile information must match the patterns)__
   * Delete account
-* [Dashboard](grooper/dashboard.html)
+* [Dashboard](dashboard.html)
   * Display my activities (polls created by the user, applications the user submitted, closed groups of the user)
   * Allow the user to access each category (polls, applications, groups management)
   * Display the status of each activity (i.e. new applicant submitted an application form for my group, invitation received, group closed)
-* [Course page with list of polls](grooper/coursepage.html)
+* [Course page with list of polls](coursepage.html)
   * Display all the polls for the course
   * Display a poll with a title, the creator of the poll, date of creation, and how many spaces are left in the team
   * Navigate the user to the poll which displays the group's description and the application form
@@ -67,13 +67,13 @@ Please note that the below features are simulations of front-end behaviors only 
   * __Block the users from submitting their forms if the questions are not answered__
   * __Block the user from applying to his/her own poll by sending the user to manage the poll__
   * User can edit his/her responses to the poll
-* [Manage polls created by me](grooper/managepoll.html)
+* [Manage polls created by me](managepoll.html)
   * Display project title, description, team size, application form, and the list of applicants with their answers to the application form
   * Edit project title, description, team size and application form
   * Invite the teammates from the list
   * Delete a poll
   * __Form validation (mandatory title, description, size of the group)__
-* [Manage my Closed groups](grooper/mygroups.html)
+* [Manage my Closed groups](mygroups.html)
   * Display the project title, description, creator of the poll, team size, and the group members
   * Users who accepted the invitation from the group owner are added to the group
 * My Applications
@@ -87,7 +87,7 @@ Please note that the below features are simulations of front-end behaviors only 
   * If the invitation to the group is rejected, the application will be removed from the list
   
 ---
-### [Requirement list from Phase 1 updated](Phase1_updated.pdf)
+### [Requirement list from Phase 1 updated](resources/Phase1_updated.pdf)
 #### Main Changes
 * Project description added to explain how "Polls" help the group formation.
 * Several backend requirements added such as hashing password, session management, and sorting the list items
