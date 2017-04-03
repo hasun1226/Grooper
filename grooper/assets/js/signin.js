@@ -10,9 +10,9 @@ $('.form-signin').on('submit', function(e) {
     contentType: "application/json; charset=utf-8",
     data: JSON.stringify({ "email": email, "pw": pw }),
     success: function(data) {
-      // Logged on the browser console
-      console.log(JSON.stringify(data));
-      window.location="dashboard?uid=" + data.userID + "&key=" + data.token;
+      document.cookie = data.token;
+	  localStorage.setItem("userID", data.userID);
+      window.location.href = "dashboard";
     },
     error: function (jqXHR, exception) {
       if (jqXHR.status === 403)

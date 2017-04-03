@@ -1,12 +1,17 @@
 $(document).ready(function() {
-	var url = window.location.href;
-	var uid = parseInt(url.substr(url.indexOf("=") + 1));
-
+	var uid = localStorage.getItem('userID');
+	
 	get_polls(uid);
 
 	get_groups(uid);
 
 	get_applications(uid);
+	
+	// Logout
+	$('#logout').click(function () {
+		document.cookie = '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		localStorage.removeItem('userID');
+	});
 });
 
 $('#poll').click(get_polls);
@@ -68,7 +73,7 @@ var add_poll_to_page = function(poll){
     			span.innerHTML = closed;
     		}
     		else{
-                a.href = "managepoll.html";
+                a.href = "managepoll?pid=" + poll._id;
                 $.ajax({
                     url: '/applications/' + poll._id + '/number',
                     type: "GET",
@@ -676,7 +681,8 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 		modal.find('.app-form').html('You are invited!');
 		
 		// the button must be edit button if the invitation was not received
-		modal.find('.questions').html('<button type="button" class="accept btn btn-success" data-dismiss="modal">Accept</button><button type="button" class="reject btn btn-danger" data-dismiss="modal">Reject</button>')
+		modal.find('#questions-wrapper').html('<button type="button" class="accept btn btn-success" data-dismiss="modal">Accept</button><button type="button" class="reject btn btn-danger" data-dismiss="modal">Reject</button>')
+
 		$('.accept').on('click', function() {
 			if (confirm('Will you accept the invitation to this group?')) {
 				// remove from applications and move to 'My groups' panel
@@ -706,12 +712,36 @@ var add_modal_to_page = function(modal, poll, group, username, uid){
 			        }),
 			        statusCode:{
 			        	200: function(res){
+							alert("You are now part of the group!");
 			        		console.log("added user " + uid +" to group successfully");
 			        	},
 			        	403: function(res){
+							alert("I'm sorry, please try again");
 							console.log("error in adding user to group");
 						}
 			        }
+				});
+				
+				
+				// Change the status of the user's application
+				$.ajax({
+					url: '/applications',
+					type: "PUT",
+					dataType: "json",
+					contentType: "application/json; charset=UTF-8",
+					data: JSON.stringify({
+						uid: uid,
+						pid: poll._id,
+						status: 2
+					}),
+					statusCode:{
+						200: function(res){
+							console.log("updated user " + uid +" to group successfully");
+						},
+						403: function(res){
+							console.log("error in updating application");
+						}
+					}
 				});
 			}
 		})

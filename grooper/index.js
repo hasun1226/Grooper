@@ -444,6 +444,7 @@ app.delete('/polls/:pid', function(req, res) {
 
 // Add a new application
 app.post('/applications', function(req, res){
+	console.log(req.body);
   // Validation
   if (!req.body.uid || !req.body.pid || !req.body.answers)
   	return res.sendStatus(400);
@@ -651,15 +652,15 @@ app.post('/groups/:pid/member', function(req, res) {
         $push: {members: req.body.uid}
       }, function(err, result){
         if(result.modifiedCount == 1){
-
           //check if the group is full
           db.collection('polls').find({
-              _id: result.pid
+              _id: parseInt(req.params.pid)
           }).toArray(function(err, poll) {
               db.collection('groups').find({
-                  pid: poll._id
+                  pid: poll[0]._id
               }).toArray(function(err, group) {
-                  if(poll.size == group.members.length + 1) { // group is full now
+				  console.log(group);
+                  if(poll.size == group[0].members.length + 1) { // group is full now
                   //set status to closed for all applicants that aren't accepted
                   db.collection('applications').find({
                       pid: poll._id

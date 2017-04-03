@@ -24,9 +24,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="profile.html">Profile<!-- li class="active" <span class="sr-only">(current)</span> --></a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="signin.html">Sign out</a></li>
+            <li><a href="profile">Profile<!-- li class="active" <span class="sr-only">(current)</span> --></a></li>
+            <li><a href="dashboard">Dashboard</a></li>
+			<li><a href="/" id="logout">Sign out</a></li>
           </ul>
 		  <form class="navbar-form navbar-right form-inline" action="/search" method="GET">
 			<div class="input-group">
@@ -71,7 +71,7 @@
 			</h3>
 		</div>
 		<form class="questions collapse" id="questions">
-		  <div class="insertbefore">
+		  <div id="insertbefore">
 			<label for="instruction">Type the question that will be asked to the others:</label>
 			  <div class="input-group" style="margin-bottom: 20px;">
 			    <span class="input-group-btn">
@@ -92,21 +92,6 @@
 		<div class="row" style="margin-bottom: 10px;">
 			<h3 class="applicants col-xs-12">Choose your Groupmates!</h3>
 		</div>
-		<div class="row">
-		    <div class="input-group item">
-				<a href="#" class="form-control applicant" data-app="1">Alan Turing</a>
-				<span class="input-group-btn">
-					<button type="submit" class="invite btn btn-success">Invite</button>
-				</span>
-			</div><!-- /input-group -->
-			
-			<div class="input-group item">
-				<a href="#" class="form-control applicant" data-app="2">Steve Jobs</a>
-				<span class="input-group-btn">
-					<button type="submit" class="invite btn btn-success">Invite</button>
-				</span>
-			</div><!-- /input-group -->
-		</div><!-- /.row -->
 	</div>
 	
 	<!-- Modal for Applicant's responses -->
@@ -115,12 +100,10 @@
         <div class="modal-content panel-success">
           <div class="modal-header panel-heading">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"></h4>
+            <h4 class="modal-title applicant_title"></h4>
           </div>
           <div class="modal-body">     
-            <div class="in-modal section-wrapper container-fluid" id="app-form">
-              <div class="row"><h4 class="col-xs-12 que" data-que="1"></h4></div>
-              <div class="row"><p class="col-xs-12 ans" data-ans="1"></p></div>
+            <div class="in-modal section-wrapper container-fluid" id="applicant-form">
             </div>
           </div>
         </div><!-- /.modal-content -->

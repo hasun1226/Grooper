@@ -1,4 +1,6 @@
 $( document ).ready(function() {
+	var uid = localStorage.getItem('userID');
+	alert(uid);
 	var url = window.location.href;
 	if (url.indexOf("#1") >= 0) {
 		$('.title').text('CSC309 - TA application');
@@ -19,9 +21,4 @@ $( document ).ready(function() {
 		$('#app-email').text(name_list[0].toLowerCase() + "." + name_list[1].toLowerCase() + "@mail.utoronto.ca");
 		$("#Application").modal("show");
 	});
-});
-
-$('.search').on('click', function() {
-	window.location="coursepage.html";
-	return false;
 });
