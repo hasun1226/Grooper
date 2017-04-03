@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grooper: Find your group</title>
+    <link rel="stylesheet" type="text/css" href="css/search.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img alt="Grooper" src="images/logo.png" style="height: 30px;"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="profile">Profile</a></li>
+            <li><a href="dashboard">Dashboard</a></li>
+			<li><a href="/" id="logout">Sign out</a></li>
+          </ul>
+		  <form class="navbar-form navbar-right form-inline" action="/search" method="GET">
+			<div class="input-group">
+			  <input type="text" class="form-control" name="course">
+			  <div class="input-group-btn">
+			    <button class="search btn btn-warning" type="submit">
+			    <i class="glyphicon glyphicon-search"></i>
+				</button>
+			  </div>
+			</div>
+		  </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+	
+	<div class="found"><%= found %></div>
+    <div class="panel panel-default panel-custom">
+      <div class="panel-heading text-center">
+        <h2 class="course"></h2>
+	    <button type="button" class="btn btn-warning right-aligned" data-toggle="modal" data-target="#createNewPoll">
+	      <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </div>
+
+      <table class="table">
+        <thead>
+    	  <tr> 
+	        <th class="col-md-3">Host</th>
+		    <th class="col-md-6">Group Title</th>
+			<th class="col-md-3">Posted Date</th>
+		    <th class="col-md-3">Slots</th>
+	      </tr>
+	    </thead>
+	    <tbody id="polls"></tbody>
+      </table>
+    </div>
+	
+	<!-- Modal for Poll creation -->
+    <div class="modal fade" id="createNewPoll" tabindex="-1" role="dialog" aria-labelledby="createNewPoll">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Create a new poll</h4>
+          </div>
+          <div class="modal-body">
+            <!-- Form starts here --> 
+            <form id ="application_form">
+              <div class="form-group">
+                <label for="inputCourse">Course code</label>
+                <input type="text" class="form-control" id="inputCourse" pattern="[a-zA-z]{3}[0-9]{3}" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectTitle">Project title</label>
+                <input type="text" class="form-control" id="inputProjectTitle" placeholder="Project title" required>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectDesc">Project description</label>
+                <textarea class="form-control" rows="3" id="inputProjectDesc" placeholder="Project description" required></textarea>
+              </div>
+              <div class="form-group" id="select">
+                <label for="inputTeammates">What is the size of your group? </label>
+                <select class="selectpicker" id="select_id">
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				</select>
+              </div>
+			  <label for="instruction">Type the question that will be asked to the others:</label>
+			  <div class="input-group" style="margin-bottom: 20px;">
+			    <span class="input-group-btn">
+				  <select class="btn" id="question_type">
+				    <option value="text">Text</option>
+					<option value="MC">MC</option>
+					<option value="Checkbox">Checkbox</option>
+				  </select>
+				</span>
+                <input type="text" class="form-control" id="inputQuestion">
+				<span class="input-group-btn">
+				  <button type="button" class="btn-default btn" style="background-color: #CFCFCF;" onclick="createQuestion()">Add</button>
+				</span>
+			  </div>
+			  <div class="form-group" id="buttons">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="submit" class="submit_btn btn btn-success" style="float: right;">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<!-- Modal for Group Description -->
+	<div class="modal fade" id="orderModal" aria-labelledby="orderModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="section-wrapper container-fluid bg-warning">
+			  <div class="row">
+			    <h3 class="group-title col-xs-9"></h3>
+				<h3 class="slots col"></h4>
+			  </div>
+			  <div class="row">
+			    <p class="description col-xs-12"></p>
+			  </div>
+			  <div class="row">
+			    <h4 class="host col-xs-12"></h4>
+			  </div>
+			</div>
+			
+			<div class="section-wrapper container-fluid bg-info" id="app-form">
+			  <div class="row" style="margin-bottom: 10px;"><h3 class="app-form col-xs-12"></h3></div>			  
+			  <form class="questions"></form>
+		  </div><!-- /.modal-body -->
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/search.js"></script>
+  </body>
+</html>

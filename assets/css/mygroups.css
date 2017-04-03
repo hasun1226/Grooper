@@ -1,0 +1,22 @@
+.section-wrapper{
+	margin:1em 1em !important;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.panel-warning > .panel-heading {
+	background-color: #fe8833 !important;
+	color: white !important;
+}
+
+.table_wrapper {
+	height: 300px;
+}
+  
+ul {
+	list-style: none;
+	max-height: 300px;
+	overflow: auto;
+	margin: 0;
+	padding: 0;
+}
