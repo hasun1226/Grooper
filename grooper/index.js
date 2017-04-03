@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var models = require('./model/db'); // Access each model by models
+var models = require('/grooper/model/db'); // Access each model by models
 var autoIncrement = require("mongodb-autoincrement");
 var fs = require('fs');
 var _ = require('underscore');
@@ -8,7 +8,7 @@ var _ = require('underscore');
 var app = express();
 
 // Set views path, template engine and default layout
-app.use(express.static(__dirname + '/assets'));
+app.use(express.static(__dirname + '/grooper/assets'));
 app.engine('.html', require('ejs').__express);
 app.engine('js', require('ejs').renderFile);
 app.set('views', __dirname);
