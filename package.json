@@ -20,7 +20,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no tests \" && exit 1",
-    "start": "node ./grooper/index.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": "7.5.0"
