@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongodb = require('mongodb');
 var models = require('./model/db'); // Access each model by models
 var autoIncrement = require("mongodb-autoincrement");
 var fs = require('fs');
@@ -38,10 +39,9 @@ app.use( bodyParser.json() );
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //mongo
-var MongoClient = require('mongodb').MongoClient;
 var mongoURL = 'mongodb://localhost/grooper';
 var db;
-MongoClient.connect(mongoURL, function(err, database) {
+mongodb.MongoClient.connect(mongoURL, function(err, database) {
   db = database;
   // Database is ready; listen on port 3000
   app.listen(3000, function () {
