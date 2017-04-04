@@ -10,6 +10,7 @@
     "express-bearer-token": "^2.1.0",
     "fs": "0.0.1-security",
     "jwt-simple": "^0.3.1",
+    "mongodb": "^2.2.25",
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^4.9.0",
     "morgan": "~1.5.0",
@@ -24,8 +25,8 @@
   },
   "engines": {
     "node": "7.5.0",
-	"npm": "4.1.2"
-  }, 
+    "npm": "4.1.2"
+  },
   "author": "Team 35",
   "license": "ISC"
 }
