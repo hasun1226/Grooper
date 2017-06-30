@@ -4,6 +4,11 @@ Grooper is a web application that helps students find groups for courses. It use
 
 ---
 
+## How to start the app
+Refer to the installation instruction available at [install.md](install.md)
+
+---
+
 ## What has been done for Phase 3?
 Roughly 85% of the features including posting, displaying, editing, and sorting by time are now virtually working. 10 necessary features, which are of login management and searching mechanisms, are still pending out of the 64 features outlined in [Phase1_updated](resources/Phase1_updated.pdf).
 
